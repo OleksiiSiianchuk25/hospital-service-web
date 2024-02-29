@@ -1,1 +1,1 @@
-# lnu-mobile-app
+# lnu-team-website
