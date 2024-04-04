@@ -3,6 +3,7 @@ using EF.service;
 using EF.service.impl;
 using EF.service.@interface;
 using Microsoft.EntityFrameworkCore;
+using NLog;
 
 namespace WebApplication2
 {
@@ -10,10 +11,13 @@ namespace WebApplication2
     {
         public static void Main(string[] args)
         {
-            var builder = WebApplication.CreateBuilder(args);
-
+            Logger logger = LogManager.GetCurrentClassLogger();
             // Add services to the container.
-
+            logger.Info("Logger is working!");
+            logger.Warn("Logger WARN message!");
+            logger.Error("logger EROR message!");
+            var builder = WebApplication.CreateBuilder(args);
+            
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
