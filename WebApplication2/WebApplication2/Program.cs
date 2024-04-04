@@ -43,7 +43,6 @@ namespace WebApplication2
 
             app.UseAuthorization();
 
-
             app.MapControllers();
 
             app.Run();

@@ -3,17 +3,6 @@ using EF.context;
 using EF.DTO.User;
 using EF.service.@interface;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Net.Http.Headers;
-using MailKit.Net.Smtp;
-using System.Text;
-using System.Text.Encodings.Web;
-using System.Threading.Tasks;
-using System.Net.Mail;
 using MimeKit;
 using SmtpClient = MailKit.Net.Smtp.SmtpClient;
 
@@ -30,28 +19,33 @@ namespace EF.service.impl
             this.roleService = roleService;
         }
 
+        /// <inheritdoc/>
         public User FindByEmail(string email)
         {
-            User user = context.Users
+            User user = this.context.Users
                 .Include(u => u.RoleRefNavigation)
                 .FirstOrDefault(u => u.Email == email);
             if (user == null)
             {
                 throw new ApplicationException("User with email: " + email + " does not exist!");
             }
+
             return user;
         }
 
+        /// <inheritdoc/>
         public User FindById(long id)
         {
-            User user = context.Users.FirstOrDefault(user => user.UserId == id);
+            User user = this.context.Users.FirstOrDefault(user => user.UserId == id);
             if (user == null)
             {
                 throw new ApplicationException("User with id: " + id + " does not exist!");
             }
+
             return user;
         }
 
+        /// <inheritdoc/>
         public void RegisterDoctor(UserDTO registerDoctor)
         {
             User newUser = new User();
@@ -62,11 +56,12 @@ namespace EF.service.impl
             newUser.Phone = registerDoctor.Phone;
             newUser.Patronymic = registerDoctor.Patronymic;
             newUser.Type = registerDoctor.Type;
-            newUser.RoleRefNavigation = roleService.GetDoctorRole();
-            context.Users.Add(newUser);
-            context.SaveChanges();
+            newUser.RoleRefNavigation = this.roleService.GetDoctorRole();
+            this.context.Users.Add(newUser);
+            this.context.SaveChanges();
         }
 
+        /// <inheritdoc/>
         public void RegisterPatient(UserDTO registerUser)
         {
             User newUser = new User();
@@ -75,20 +70,23 @@ namespace EF.service.impl
             newUser.Email = registerUser.Email;
             newUser.Password = BCrypt.Net.BCrypt.HashPassword(registerUser.Password);
             newUser.Phone = registerUser.Phone;
-            newUser.RoleRefNavigation = roleService.GetPatientRole();
-            context.Users.Add(newUser);
-            context.SaveChanges();
-        }
-        public void DeleteById(long id)
-        {
-            User userToDelete = FindById(id);
-            context.Users.Remove(userToDelete);
-            context.SaveChanges();
+            newUser.RoleRefNavigation = this.roleService.GetPatientRole();
+            this.context.Users.Add(newUser);
+            this.context.SaveChanges();
         }
 
+        /// <inheritdoc/>
+        public void DeleteById(long id)
+        {
+            User userToDelete = this.FindById(id);
+            this.context.Users.Remove(userToDelete);
+            this.context.SaveChanges();
+        }
+
+        /// <inheritdoc/>
         public void EditUser(UpdateUserDTO user)
         {
-            User updateUser = FindById(user.UserId);
+            User updateUser = this.FindById(user.UserId);
             updateUser.FirstName = user.FirstName;
             updateUser.LastName = user.LastName;
             updateUser.Phone = user.Phone;
@@ -97,33 +95,38 @@ namespace EF.service.impl
             {
                 updateUser.Patronymic = user.Patronymic;
             }
+
             if (user.Type != null){
                 updateUser.Type = user.Type;
             }
-            context.SaveChanges();
+
+            this.context.SaveChanges();
         }
 
+        /// <inheritdoc/>
         public List<User> GetDoctors()
         {
-            return context.Users
-                .Where(user => user.RoleRef == roleService.GetDoctorRole().RoleId)
+            return this.context.Users
+                .Where(user => user.RoleRef == this.roleService.GetDoctorRole().RoleId)
                 .ToList();
         }
 
+        /// <inheritdoc/>
         public List<User> GetPatients()
         {
-            return context.Users
-                .Where(user => user.RoleRef == roleService.GetPatientRole().RoleId)
+            return this.context.Users
+                .Where(user => user.RoleRef == this.roleService.GetPatientRole().RoleId)
                 .ToList();
         }
 
+        /// <inheritdoc/>
         public void ChangePasswordByEmail(string email)
         {
-            User user = FindByEmail(email);
-            string newPassword = (GeneratePassoword());
+            User user = this.FindByEmail(email);
+            string newPassword = (this.GeneratePassoword());
             user.Password = BCrypt.Net.BCrypt.HashPassword(newPassword);
-            SendEmailViaGmail(email, newPassword);
-            context.SaveChanges();
+            this.SendEmailViaGmail(email, newPassword);
+            this.context.SaveChanges();
         }
 
         private string GeneratePassoword()
@@ -131,16 +134,15 @@ namespace EF.service.impl
             var faker = new Faker();
             return faker.Internet.Password(8, false, "^");
         }
-        private void SendEmailViaGmail(string email,string password)
+
+        private void SendEmailViaGmail(string email, string password)
         {
             MimeMessage mailMessage = new MimeMessage();
             mailMessage.From.Add(MailboxAddress.Parse("legendshospitalbimbimbambam@gmail.com"));
             mailMessage.To.Add(MailboxAddress.Parse(email));
 
-
             mailMessage.Subject = "Новий пароль від eHospital";
             mailMessage.Body = new TextPart(MimeKit.Text.TextFormat.Html) { Text = "Ваш новий пароль: " + password + "<p>Записуйте на листочок!</p>"};
-            
 
             using SmtpClient smtpClient = new SmtpClient();
             try
@@ -158,21 +160,22 @@ namespace EF.service.impl
             {
                 smtpClient.Disconnect(true);
                 smtpClient.Dispose();
-
             }
         }
 
+        /// <inheritdoc/>
         public long GetNumberOfDoctors()
         {
-            return context.Users
-                .Where(user => user.RoleRef == roleService.GetDoctorRole().RoleId)
+            return this.context.Users
+                .Where(user => user.RoleRef == this.roleService.GetDoctorRole().RoleId)
                 .Count();
         }
 
+        /// <inheritdoc/>
         public long GetNumberOfPatients()
         {
-            return context.Users
-               .Where(user => user.RoleRef == roleService.GetPatientRole().RoleId)
+            return this.context.Users
+               .Where(user => user.RoleRef == this.roleService.GetPatientRole().RoleId)
                .Count();
         }
     }

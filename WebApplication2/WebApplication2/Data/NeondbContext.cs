@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 
 namespace EF.context;
 
@@ -24,6 +22,7 @@ public partial class NeondbContext : DbContext
     /*protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         => optionsBuilder.UseNpgsql("Host=ep-damp-wood-56616604.eu-central-1.aws.neon.tech;Database=neondb;Username=Orik25;Password=fnF9SZOoqQR7");*/
 
+    /// <inheritdoc/>
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Appointment>(entity =>
@@ -115,11 +114,9 @@ public partial class NeondbContext : DbContext
                 .HasForeignKey(a => a.DoctorRef)
                 .HasConstraintName("fk_doctor")
                 .OnDelete(DeleteBehavior.Cascade);
-
         });
 
-
-        OnModelCreatingPartial(modelBuilder);
+        this.OnModelCreatingPartial(modelBuilder);
     }
 
     partial void OnModelCreatingPartial(ModelBuilder modelBuilder);

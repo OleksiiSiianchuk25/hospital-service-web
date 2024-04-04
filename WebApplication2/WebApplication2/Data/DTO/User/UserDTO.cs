@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace EF.DTO.User
+﻿namespace EF.DTO.User
 {
     public class UserDTO
     {
@@ -26,13 +20,13 @@ namespace EF.DTO.User
 
         public UserDTO(string email, string firstName, string lastName, string patronymic, string phone, string password, string type)
         {
-            Email = email;
-            FirstName = firstName;
-            LastName = lastName;
-            Patronymic = patronymic;
-            Phone = phone;
-            Password = password;
-            Type = type;
+            this.Email = email;
+            this.FirstName = firstName;
+            this.LastName = lastName;
+            this.Patronymic = patronymic;
+            this.Phone = phone;
+            this.Password = password;
+            this.Type = type;
         }
 
         public UserDTO()
@@ -41,11 +35,11 @@ namespace EF.DTO.User
 
         public UserDTO(string email, string firstName, string lastName, string phone, string password)
         {
-            Email = email;
-            FirstName = firstName;
-            LastName = lastName;
-            Phone = phone;
-            Password = password;
+            this.Email = email;
+            this.FirstName = firstName;
+            this.LastName = lastName;
+            this.Phone = phone;
+            this.Password = password;
         }
     }
 }

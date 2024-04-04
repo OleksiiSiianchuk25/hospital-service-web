@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
-using System.Text.Json.Serialization;
-
-namespace EF;
+﻿namespace EF;
 
 public partial class Appointment
 
@@ -26,11 +20,11 @@ public partial class Appointment
 
     public Appointment(DateTime dateAndTime, string? message, string status, long patientRef, long doctorRef)
     {
-        DateAndTime = dateAndTime;
-        Message = message;
-        Status = status;
-        PatientRef = patientRef;
-        DoctorRef = doctorRef;
+        this.DateAndTime = dateAndTime;
+        this.Message = message;
+        this.Status = status;
+        this.PatientRef = patientRef;
+        this.DoctorRef = doctorRef;
     }
 
     public Appointment()

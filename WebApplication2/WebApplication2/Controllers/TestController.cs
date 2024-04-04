@@ -1,6 +1,5 @@
 ﻿using EF.service;
 using EF.service.@interface;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebApplication2.Controllers
@@ -27,21 +26,21 @@ namespace WebApplication2.Controllers
         [Route("role")]
         public IActionResult GetRole()
         {
-            return Ok(roleService.GetPatientRole());
+            return this.Ok(this.roleService.GetPatientRole());
         }
 
         [HttpGet]
         [Route("users")]
         public IActionResult GetUsers()
         {
-            return Ok(userService.FindByEmail("Ressie55@yahoo.com"));
+            return this.Ok(this.userService.FindByEmail("Ressie55@yahoo.com"));
         }
 
         [HttpGet]
         [Route("appointments")]
         public IActionResult GetAppointments()
         {
-            return Ok(appointmentService.GetAppointments());
+            return this.Ok(this.appointmentService.GetAppointments());
         }
     }
 }

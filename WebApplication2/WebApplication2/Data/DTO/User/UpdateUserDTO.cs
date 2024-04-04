@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace EF.DTO.User
+﻿namespace EF.DTO.User
 {
     public class UpdateUserDTO
     {
@@ -25,24 +19,23 @@ namespace EF.DTO.User
         //Doctor
         public UpdateUserDTO(long userId, string email, string firstName, string lastName, string patronymic, string phone, string type)
         {
-            UserId = userId;
-            Email = email;
-            FirstName = firstName;
-            LastName = lastName;
-            Patronymic = patronymic;
-            Phone = phone;
-            Type = type;
+            this.UserId = userId;
+            this.Email = email;
+            this.FirstName = firstName;
+            this.LastName = lastName;
+            this.Patronymic = patronymic;
+            this.Phone = phone;
+            this.Type = type;
         }
-
 
         //Patient
         public UpdateUserDTO(long userId, string email, string firstName, string lastName, string phone)
         {
-            UserId = userId;
-            Email = email;
-            FirstName = firstName;
-            LastName = lastName;
-            Phone = phone;
+            this.UserId = userId;
+            this.Email = email;
+            this.FirstName = firstName;
+            this.LastName = lastName;
+            this.Phone = phone;
         }
     }
 }

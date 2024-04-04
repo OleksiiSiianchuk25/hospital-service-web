@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace EF.DTO.Appointment
+﻿namespace EF.DTO.Appointment
 {
     public class AppointmentDTO
     {
@@ -23,21 +17,19 @@ namespace EF.DTO.Appointment
 
         public AppointmentDTO(long appointmentId, DateTime dateAndTime, string? message, long patientRef, long doctorRef)
         {
-            AppointmentId = appointmentId;
-            DateAndTime = dateAndTime;
-            Message = message;
-            PatientRef = patientRef;
-            DoctorRef = doctorRef;
+            this.AppointmentId = appointmentId;
+            this.DateAndTime = dateAndTime;
+            this.Message = message;
+            this.PatientRef = patientRef;
+            this.DoctorRef = doctorRef;
         }
 
         public AppointmentDTO(DateTime dateAndTime, string? message, long patientRef, long doctorRef)
         {
-            DateAndTime = dateAndTime;
-            Message = message;
-            PatientRef = patientRef;
-            DoctorRef = doctorRef;
+            this.DateAndTime = dateAndTime;
+            this.Message = message;
+            this.PatientRef = patientRef;
+            this.DoctorRef = doctorRef;
         }
     }
-
-
 }

@@ -1,10 +1,5 @@
 ﻿using EF.context;
 using EF.service.@interface;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace EF.service.impl
 {
@@ -16,19 +11,23 @@ namespace EF.service.impl
         {
             this.context = context;
         }
+
+        /// <inheritdoc/>
         public Role GetAdminRole()
         {
-            return context.Roles.Find(3L);
+            return this.context.Roles.Find(3L);
         }
 
+        /// <inheritdoc/>
         public Role GetDoctorRole()
         {
-            return context.Roles.Find(1L);
+            return this.context.Roles.Find(1L);
         }
 
+        /// <inheritdoc/>
         public Role GetPatientRole()
         {
-            return context.Roles.Find(2L);
+            return this.context.Roles.Find(2L);
         }
     }
 }
