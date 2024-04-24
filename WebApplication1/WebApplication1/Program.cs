@@ -3,6 +3,7 @@ using EF.service;
 using EF.service.impl;
 using EF.service.@interface;
 using Microsoft.EntityFrameworkCore;
+using NLog;
 
 namespace WebApplication1
 {
@@ -10,6 +11,12 @@ namespace WebApplication1
     {
         public static void Main(string[] args)
         {
+            Logger logger = LogManager.GetCurrentClassLogger();
+            // Add services to the container.
+            logger.Info("Logger is working! Hospital Doctor Dre.");
+            logger.Warn("Logger WARN message!");
+            logger.Error("logger EROR message!");
+
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
