@@ -12,7 +12,6 @@ namespace WebApplication1
         public static void Main(string[] args)
         {
             Logger logger = LogManager.GetCurrentClassLogger();
-            // Add services to the container.
             logger.Info("Logger is working! Hospital Doctor Dre.");
             logger.Warn("Logger WARN message!");
             logger.Error("logger EROR message!");
