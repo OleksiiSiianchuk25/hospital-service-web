@@ -12,6 +12,11 @@ namespace EF.service.impl
     {
         private readonly NeondbContext context;
         private readonly IRoleService roleService;
+        public UserServiceImpl(NeondbContext context)
+        {
+            this.context = context;
+            this.roleService = new RoleServiceImpl(context);
+        }
 
         public UserServiceImpl(NeondbContext context, IRoleService roleService)
         {
