@@ -1,13 +1,13 @@
 ﻿namespace EF;
 
 public partial class Appointment
-
 {
     public long AppointmentId { get; set; }
 
     public DateTime DateAndTime { get; set; }
 
     public string? Message { get; set; }
+
     public string Status { get; set; }
 
     public long PatientRef { get; set; }

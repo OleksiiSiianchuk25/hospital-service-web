@@ -16,7 +16,7 @@
 
         public string Type { get; set; } = null!;
 
-        //Doctor
+        // Doctor
         public UpdateUserDTO(long userId, string email, string firstName, string lastName, string patronymic, string phone, string type)
         {
             this.UserId = userId;
@@ -28,7 +28,7 @@
             this.Type = type;
         }
 
-        //Patient
+        // Patient
         public UpdateUserDTO(long userId, string email, string firstName, string lastName, string phone)
         {
             this.UserId = userId;

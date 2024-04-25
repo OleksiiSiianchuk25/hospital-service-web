@@ -12,6 +12,7 @@ namespace EF.service.impl
     {
         private readonly NeondbContext context;
         private readonly IRoleService roleService;
+
         public UserServiceImpl(NeondbContext context)
         {
             this.context = context;
@@ -101,7 +102,8 @@ namespace EF.service.impl
                 updateUser.Patronymic = user.Patronymic;
             }
 
-            if (user.Type != null){
+            if (user.Type != null)
+            {
                 updateUser.Type = user.Type;
             }
 
@@ -147,7 +149,7 @@ namespace EF.service.impl
             mailMessage.To.Add(MailboxAddress.Parse(email));
 
             mailMessage.Subject = "Новий пароль від eHospital";
-            mailMessage.Body = new TextPart(MimeKit.Text.TextFormat.Html) { Text = "Ваш новий пароль: " + password + "<p>Записуйте на листочок!</p>"};
+            mailMessage.Body = new TextPart(MimeKit.Text.TextFormat.Html) { Text = "Ваш новий пароль: " + password + "<p>Записуйте на листочок!</p>" };
 
             using SmtpClient smtpClient = new SmtpClient();
             try
