@@ -115,7 +115,7 @@ namespace Tests
 
                 // Assert
                 int[] appointmentsCount = GetAppointmentsCount();
-                Assert.AreEqual(appointmentsCountBefore.Length+1, appointmentsCount.Length);
+                Assert.AreEqual(appointmentsCountBefore.Length + 1, appointmentsCount.Length);
             }
 
             // Ìåòîä äëÿ îòðèìàííÿ ê³ëüêîñò³ çàïèñ³â ó òàáëèö³ appointments

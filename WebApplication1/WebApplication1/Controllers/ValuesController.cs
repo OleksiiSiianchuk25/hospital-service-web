@@ -43,6 +43,5 @@ namespace WebApplication1.Controllers
         {
             return this.Ok(this.appointmentService.GetAppointments());
         }
-
     }
 }

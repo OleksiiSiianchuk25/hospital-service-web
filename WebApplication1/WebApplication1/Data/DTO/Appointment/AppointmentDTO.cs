@@ -7,13 +7,16 @@
         public DateTime DateAndTime { get; set; }
 
         public string? Message { get; set; } = null!;
+
         public string Status { get; set; } = null!;
 
         public long PatientRef { get; set; }
 
         public long DoctorRef { get; set; }
 
-        public AppointmentDTO() { }
+        public AppointmentDTO()
+        {
+        }
 
         public AppointmentDTO(long appointmentId, DateTime dateAndTime, string? message, long patientRef, long doctorRef)
         {
