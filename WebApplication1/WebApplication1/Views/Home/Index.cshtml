@@ -2,6 +2,55 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-</div>
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Centered White Rectangle</title>
+<style>
+    body {
+        margin: 0;
+        padding: 0;
+        background-color: #D0D0D0; /* Сірий фон */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh; /* Висота вікна браузера */
+    }
+    .window {
+        width: 80%; /* Ширина прямокутника */
+        height: 80%; /* Висота прямокутника */
+        background-color: #ffffff; /* Білий колір */
+        display: flex;
+        /* Вирівнюємо елементи горизонтально */
+        justify-content: space-between;
+        align-items: center;
+    }
+    .left-menu {
+        width: 20%; /* Ширина лівого меню */
+        height: 100%; /* Висота лівого меню */
+        background-color: #403D49; /* Чорний колір */
+    }
+    .container {
+        width: calc(80% - 0px); /* Ширина контейнера (з урахуванням відступу 10% з кожного боку) */
+        height: 100%; /* Висота контейнера */
+        background-color: #FFFFFF; /* Бірий колір */
+    }
+</style>
+</head>
+<body>
+    <div class="window">
+        <div class="left-menu">
+
+        </div>
+        <div class="container">
+        </div>
+    </div>
+</body>
+</html>
+
