@@ -2,10 +2,6 @@
     ViewData["Title"] = "Home Page";
 }
 
-@{
-    ViewData["Title"] = "Home Page";
-}
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -41,6 +37,47 @@
         height: 100%; /* Висота контейнера */
         background-color: #FFFFFF; /* Бірий колір */
     }
+    .modal {
+        display: none; /* Початково прихований */
+        position: fixed;
+        z-index: 1;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0,0,0,0.4); /* Напівпрозорий фон */
+    }
+
+    .modal-content {
+
+   /* background-color: red;*/ 
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 30%;
+    height: 50%;
+    border-radius: 20px;
+    background-color: aquamarine;
+    padding: 40px;
+}
+
+
+    /* Закриття модального вікна */
+    .close {
+        color: #aaa;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+    }
+
+    .close:hover,
+    .close:focus {
+        color: black;
+        text-decoration: none;
+        cursor: pointer;
+    }
 </style>
 </head>
 <body>
@@ -49,8 +86,46 @@
 
         </div>
         <div class="container">
+            <button onclick="openModal()">Відкрити діалогове вікно</button>
+        </div>
+        <!-- Модальне вікно -->
+        <div id="myModal" class="modal">
+          <!-- Вміст модального вікна -->
+          <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h2>Моя форма</h2>
+            <form>
+                <!-- Тут ваші поля форми -->
+                <input type="text" placeholder="Ім'я">
+                <br>
+                <input type="email" placeholder="Email">
+                <br>
+                <button type="submit">Надіслати</button>
+            </form>
+          </div>
         </div>
     </div>
+    <script>
+// JavaScript для відкриття та закриття модального вікна
+var modal = document.getElementById("myModal");
+
+// Функція для відкриття модального вікна
+function openModal() {
+  modal.style.display = "block";
+}
+
+// Функція для закриття модального вікна
+function closeModal() {
+  modal.style.display = "none";
+}
+
+// Закриваємо модальне вікно, якщо користувач клікає поза ним
+window.onclick = function(event) {
+  if (event.target == modal) {
+    closeModal();
+  }
+}
+</script>
 </body>
 </html>
 
