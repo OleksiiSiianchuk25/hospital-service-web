@@ -50,12 +50,19 @@
     }
 
     .modal-content {
-        background-color: #fefefe;
-        margin: 15% auto;
-        padding: 20px;
-        border: 1px solid #888;
-        width: 80%;
-    }
+
+   /* background-color: red;*/ 
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 30%;
+    height: 50%;
+    border-radius: 20px;
+    background-color: aquamarine;
+    padding: 40px;
+}
+
 
     /* Закриття модального вікна */
     .close {
@@ -80,23 +87,22 @@
         </div>
         <div class="container">
             <button onclick="openModal()">Відкрити діалогове вікно</button>
-
-<!-- Модальне вікно -->
-<div id="myModal" class="modal">
-  <!-- Вміст модального вікна -->
-  <div class="modal-content">
-    <span class="close" onclick="closeModal()">&times;</span>
-    <h2>Моя форма</h2>
-    <form>
-        <!-- Тут ваші поля форми -->
-        <input type="text" placeholder="Ім'я">
-        <br>
-        <input type="email" placeholder="Email">
-        <br>
-        <button type="submit">Надіслати</button>
-    </form>
-  </div>
-</div>
+        </div>
+        <!-- Модальне вікно -->
+        <div id="myModal" class="modal">
+          <!-- Вміст модального вікна -->
+          <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h2>Моя форма</h2>
+            <form>
+                <!-- Тут ваші поля форми -->
+                <input type="text" placeholder="Ім'я">
+                <br>
+                <input type="email" placeholder="Email">
+                <br>
+                <button type="submit">Надіслати</button>
+            </form>
+          </div>
         </div>
     </div>
     <script>
