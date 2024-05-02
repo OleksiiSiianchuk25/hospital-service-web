@@ -57,7 +57,7 @@
     width: 30%;
     height: 50%;
     border-radius: 20px;
-    background-color: aquamarine;
+    background-color: #FFFFFF;
     padding: 40px;
     }
 
@@ -76,6 +76,57 @@
         text-decoration: none;
         cursor: pointer;
     }
+    .form-group {
+    margin-bottom: 20px;
+}
+
+/* Заокруглення форм */
+.rounded-input {
+    border-radius: 20px;
+    border: 3px solid #AD99DA;
+    padding: 8px;
+    width: calc(100% - 16px);
+}
+
+/* Стилізація кнопки */
+button[type="submit"] {
+    border: none;
+    background-color: #AD99DA;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 10px;
+    cursor: pointer;
+    margin-left: auto;
+}
+
+/* Стилі для розділення на дві колонки */
+.form-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+/* Горизонтальний відступ між формами */
+.form-row input {
+    margin-right: 10px;
+}
+
+/* Стилі для кнопки */
+button[type="submit"] {
+    margin-top: -10px;
+    
+}
+.dialog-text{
+    color: #B6AEE5;
+    font-size: 24px;
+    font-weight: bold;
+}
+.add-doctor{
+    margin-left: 10000px;
+    background-color: red;
+     margin-top: 20px;
+}
+
 </style>
 </head>
 <body>
@@ -91,16 +142,28 @@
           <!-- Вміст модального вікна -->
           <div class="modal-content">
             <span class="close" onclick="closeModal()">&times;</span>
-            <h2>Моя форма</h2>
+            <h2 class="dialog-text">Додавання нового лікаря</h2>
             <form>
-                <!-- Тут ваші поля форми -->
-                <input type="text" placeholder="Ім'я">
-                <br>
-                <input type="email" placeholder="Email">
-                <br>
-                <button type="submit">Надіслати</button>
+                <div class="form-row">
+                    <input type="text" id="firstName" name="firstName" class="rounded-input" placeholder="Ім'я" required>
+                    <input type="text" id="lastName" name="lastName" class="rounded-input" placeholder="Прізвище" required>
+                </div>
+                <div class="form-row">
+                    <input type="text" id="middleName" name="middleName" class="rounded-input" placeholder="По батькові" required>
+                    <input type="text" id="position" name="position" class="rounded-input" placeholder="Посада" required>
+                </div>
+                <div class="form-row">
+                    <input type="tel" id="phone" name="phone" class="rounded-input" placeholder="Телефон" required>
+                    <input type="email" id="email" name="email" class="rounded-input" placeholder="Пошта" required>
+                </div>
+                <div class="form-row">
+                    <input type="password" id="password" name="password" class="rounded-input" placeholder="Пароль" required>
+                </div>
             </form>
-          </div>
+            <button class="add-doctor" type="submit">Надіслати</button>
+        </div>
+        <!--END MODAL-->
+
         </div>
     </div>
     <script>

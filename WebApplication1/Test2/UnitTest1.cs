@@ -27,7 +27,7 @@ namespace TestProject1
             // Arrange
             var mockContext = new Mock<NeondbContext>();
             var mockRoleService = new RoleServiceImpl(mockContext.Object);
-            
+
             var userService = new UserServiceImpl(mockContext.Object, mockRoleService);
             //userService.setRoleService(mockRoleService.Object);
             var userDto = new UserDTO
@@ -152,8 +152,8 @@ namespace TestProject1
             var userService = new UserServiceImpl(mockContext.Object);
 
             var userMail = "test@gmail.com";
-            var expectedUser = new User { FirstName = "Oleg",Email = userMail };
-            var newUser = new UpdateUserDTO (expectedUser.UserId, userMail, "Anton", "Ki", "380977170704");
+            var expectedUser = new User { FirstName = "Oleg", Email = userMail };
+            var newUser = new UpdateUserDTO(expectedUser.UserId, userMail, "Anton", "Ki", "380977170704");
 
             mockContext.Setup(c => c.Users)
                 .Returns(MockDbSet.CreateDbSetMock(new[] { expectedUser }).Object);
@@ -166,7 +166,7 @@ namespace TestProject1
             var foundUser = userService.FindByEmail(userMail);
 
             // Assert
-          
+
             Assert.AreEqual("Anton", foundUser.FirstName);
         }
         [TestMethod]
@@ -234,14 +234,14 @@ namespace TestProject1
             User user1 = new User { UserId = 1L, RoleRef = 1L };
             var expectedDoctors = new List<User> {
             user1
-  
+
         };
 
             var expectedDoctorRole = new Role { RoleId = 1L };
             mockContext.Setup(c => c.Roles.Find(1L)).Returns(expectedDoctorRole);
             mockContext.Setup(c => c.Users).Returns(MockDbSet.CreateDbSetMock(new[] { user1 }).Object);
 
-           
+
 
             // Act
             var doctors = userService.GetDoctors();
@@ -321,7 +321,7 @@ namespace TestProject1
             var doctors = userService.GetNumberOfDoctors();
 
             // Assert
-            
+
 
             Assert.AreEqual(doctors, expectedDoctors.Count);
         }
@@ -364,7 +364,7 @@ namespace TestProject1
             var mockUserService = new Mock<UserServiceImpl>(mockContext.Object);
 
             var appointmentService = new AppointmentServiceImpl(mockContext.Object, mockUserService.Object);
-            
+
             var appointmentDto = new AppointmentDTO
             {
                 AppointmentId = 123L,
@@ -379,16 +379,16 @@ namespace TestProject1
 
             var app = new Appointment { AppointmentId = 1L };
 
-            
+
             mockContext.Setup(c => c.Appointments)
                 .Returns(MockDbSet.CreateDbSetMock(new[] { app }).Object);
-            
+
             var expectedUser2 = new User { UserId = 2L };
 
-            
+
 
             mockContext.Setup(c => c.Users).Returns(MockDbSet.CreateDbSetMock(new[] { expectedUser }).Object);
-           
+
             appointmentService.AddNew(appointmentDto);
 
             mockContext.Verify(c => c.SaveChanges(), Times.Once);
@@ -400,7 +400,7 @@ namespace TestProject1
             {
                 AppointmentId = 1L
             };
-           
+
 
             var mockContext = new Mock<NeondbContext>();
             mockContext.Setup(c => c.Appointments).Returns(MockDbSet.CreateDbSetMock(new[] { appointment }).Object);
@@ -409,7 +409,7 @@ namespace TestProject1
 
             var appointmentById = appointmentService.FindById(1L);
 
-            
+
             Assert.AreEqual(appointment.AppointmentId, appointmentById.AppointmentId);
         }
         [TestMethod]
@@ -417,7 +417,8 @@ namespace TestProject1
         {
             Appointment appointment = new Appointment
             {
-                AppointmentId = 1L, Status="активний"
+                AppointmentId = 1L,
+                Status = "активний"
             };
 
 
@@ -475,7 +476,7 @@ namespace TestProject1
             // Act
             var appointmentsGet = appointmentService.GetAppointments();
 
-            
+
 
             Assert.AreEqual(appointments.Count, appointmentsGet.Count);
         }
@@ -657,7 +658,7 @@ namespace TestProject1
 
             Assert.AreEqual(expectedRoleRefNavigation, user.RoleRefNavigation);
 
-          
+
         }
         [TestMethod]
         public void TestFindById_WhenUserExists()

@@ -14,11 +14,13 @@ namespace EF.service.impl
             this.context = context;
             this.userService = userService;
         }
+
         public AppointmentServiceImpl(NeondbContext context)
         {
             this.context = context;
             this.userService = new UserServiceImpl(context);
         }
+
         /// <inheritdoc/>
         public Appointment FindById(long id)
         {
@@ -125,7 +127,7 @@ namespace EF.service.impl
             {
                 start = new DateTime(currentDateTime.Year, currentDateTime.Month, currentDateTime.Day, 9, 0, 0);
             }
-            
+
             DateTime finish = new DateTime(currentDateTime.Year, currentDateTime.Month, currentDateTime.Day, 17, 0, 0);
 
             List<DateTime> freeDates = new List<DateTime>();
