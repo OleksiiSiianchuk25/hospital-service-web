@@ -1,4 +1,5 @@
 ﻿using EF.DTO.User;
+using WebApplication1.Data.DTO.User;
 
 namespace EF.service
 {
@@ -6,7 +7,7 @@ namespace EF.service
     {
         User FindById(long id);
         User FindByEmail(string email);
-        void RegisterPatient(UserDTO registerUser);
+        void RegisterPatient(UserRegistrationDTO registerUser);
         void RegisterDoctor(UserDTO registerUser);
         void EditUser(UpdateUserDTO user);
         void DeleteById(long id);

@@ -1,0 +1,138 @@
+﻿@{
+    ViewData["Title"] = "Login Page";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Centered White Rectangle</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #D0D0D0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .window {
+            width: 80%;
+            height: 80%; 
+            background-color: #B6AEE5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .inner_window{
+            width: 60%;
+            height: 80%;
+            background-color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 20px;
+        }
+
+        .inner_content {
+            display: flex;
+            justify-content: flex-start;
+            align-items: flex-start;
+            flex-direction: column;
+            width: 80%;
+            height: 85%;
+        }
+
+        .lable {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 24px;
+            color: #B6AEE5;
+            font-weight: bold;
+        }
+
+        .rounded-input {
+            border-radius: 20px;
+            border: 3px solid #B6AEE5;
+            padding: 8px;
+            width:100%;
+        }
+
+        .form{
+            width: 95%;
+        }
+
+        .rounded-input{
+            margin-bottom:5%;
+        }
+
+        .rounded-input::placeholder {
+            font-weight: bold;
+            color: black
+        }
+
+        .enter{
+            border: none;
+            background-color: #B6AEE5;
+            color: white;
+            padding: 10px 30px;
+            border-radius: 10px;
+            cursor: pointer;
+            margin-left: auto;
+            margin-top:5%;
+        }
+
+        .inner_buttons {
+            display: flex;
+            flex-direction: row; 
+            justify-content: flex-end;
+            
+        }
+
+        .inner_button {
+            background-color: transparent;
+            border: none;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: bold; 
+            text-decoration: underline;
+            color: #B6AEE5;
+            margin-left:70px;
+            cursor:pointer;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="window">
+        <div class="inner_window">
+            <div class="inner_content">
+                <div><p class="lable">Вхід</p></div>
+                <form class="form" id="loginForm" action="/api/login" method="post">
+                    <input type="email" id="email" name="email" class="rounded-input" placeholder="Пошта">
+                    <input type="password" id="password" name="password" class="rounded-input" placeholder="Пароль">
+                </form>
+                <div class="inner_buttons">
+                    <form action="/api/registration" method="get">
+                        <button class="inner_button" type="submit">Немає аккаунта?</button>
+
+                    </form>
+                    <form action="/api/forgot-password" method="get">
+                        <button class="inner_button" type="submit">Забув пароль?</button>
+                    </form>
+                </div>
+                <button type="button" class="enter" onclick="submitForm()">Вхід</button>
+                
+            </div>
+        </div>
+    </div>
+    <script>
+        function submitForm() {
+            document.getElementById("loginForm").submit();
+        }
+    </script>
+</body>
+</html>
