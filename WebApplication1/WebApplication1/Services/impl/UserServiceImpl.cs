@@ -4,6 +4,7 @@ using EF.DTO.User;
 using EF.service.@interface;
 using Microsoft.EntityFrameworkCore;
 using MimeKit;
+using WebApplication1.Data.DTO.User;
 using SmtpClient = MailKit.Net.Smtp.SmtpClient;
 
 namespace EF.service.impl
@@ -68,7 +69,7 @@ namespace EF.service.impl
         }
 
         /// <inheritdoc/>
-        public void RegisterPatient(UserDTO registerUser)
+        public void RegisterPatient(UserRegistrationDTO registerUser)
         {
             User newUser = new User();
             newUser.FirstName = registerUser.FirstName;

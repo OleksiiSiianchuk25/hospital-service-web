@@ -1,4 +1,5 @@
 ﻿using EF.DTO.User;
+using WebApplication1.Data.DTO.User;
 
 namespace EF.service
 {
@@ -8,7 +9,7 @@ namespace EF.service
 
         User FindByEmail(string email);
 
-        void RegisterPatient(UserDTO registerUser);
+        void RegisterPatient(UserRegistrationDTO registerUser);
 
         void RegisterDoctor(UserDTO registerUser);
 
