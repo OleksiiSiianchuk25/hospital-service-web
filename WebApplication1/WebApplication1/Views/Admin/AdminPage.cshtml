@@ -1,0 +1,391 @@
+﻿@* @using EF.DTO.User; *@
+@using WebApplication1.Controllers;
+@{
+    ViewData["Title"] = "Admin Page";
+}
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Centered White Rectangle</title>
+<style>
+    body {
+        margin: 0;
+        padding: 0;
+        background-color: #D0D0D0; /* Сірий фон */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh; /* Висота вікна браузера */
+    }
+    .window {
+        width: 80%; /* Ширина прямокутника */
+        height: 80%; /* Висота прямокутника */
+        background-color: #ffffff; /* Білий колір */
+        display: flex;
+        /* Вирівнюємо елементи горизонтально */
+        justify-content: space-between;
+        align-items: center;
+    }
+    .left-menu {
+        width: 20%; /* Ширина лівого меню */
+        height: 100%; /* Висота лівого меню */
+        background-color: #403D49; /* Чорний колір */
+    }
+    .container {
+        width: calc(80% - 0px); /* Ширина контейнера (з урахуванням відступу 10% з кожного боку) */
+        height: 100%; /* Висота контейнера */
+        background-color: #FFFFFF; /* Бірий колір */
+    }
+    .modal {
+        display: none; /* Початково прихований */
+        position: fixed;
+        z-index: 1;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0,0,0,0.4); /* Напівпрозорий фон */
+    }
+
+    .modal-edit {
+        display: none; /* Початково прихований */
+        position: fixed;
+        z-index: 1;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0,0,0,0.4); /* Напівпрозорий фон */
+    }
+
+    .modal-content {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 30%;
+    height: 50%;
+    border-radius: 20px;
+    background-color: #FFFFFF;
+    padding: 40px;
+    }
+
+
+    /* Закриття модального вікна */
+    .close {
+        color: #aaa;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+    }
+
+    .close:hover,
+    .close:focus {
+        color: black;
+        text-decoration: none;
+        cursor: pointer;
+    }
+    .form-group {
+    margin-bottom: 20px;
+}
+
+/* Заокруглення форм */
+.rounded-input {
+    border-radius: 20px;
+    border: 3px solid #AD99DA;
+    padding: 8px;
+    width: calc(100% - 16px);
+}
+
+/* Стилізація кнопки */
+button[type="submit"] {
+    border: none;
+    background-color: #AD99DA;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 10px;
+    cursor: pointer;
+    margin-left: auto;
+}
+
+/* Стилі для розділення на дві колонки */
+.form-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+/* Горизонтальний відступ між формами */
+.form-row input {
+    margin-right: 10px;
+}
+
+/* Стилі для кнопки */
+button[type="submit"] {
+    margin-top: -10px;
+    
+}
+.dialog-text{
+    color: #B6AEE5;
+    font-size: 24px;
+    font-weight: bold;
+}
+/* Стилі для таблиці */
+/* Стилі для таблиці */
+.table-history {
+    width: 90%; /* Ширина таблиці */
+    margin: 0 auto; /* Вирівнювання по центру */
+    border-collapse: collapse; /* Злиття меж між комірками */
+    overflow-y: auto; /* Додавання вертикального скролу */
+    max-height: 100px; /* Максимальна висота таблиці */
+    
+}
+
+
+/* Стилі для заголовків таблиці */
+.table-history th {
+    font-weight: bold; /* Жирний шрифт */
+    border-bottom: 1px solid #ccc; /* Горизонтальна лінія між заголовками і рядками */
+    padding: 10px; /* Відступи від тексту до межі комірки */
+    background-color: white;
+}
+
+/* Стилі для комірок таблиці */
+.table-history td {
+    border-bottom: 1px solid #ccc; /* Горизонтальна лінія між рядками */
+    padding: 10px; /* Відступи від тексту до межі комірки */
+    background-color: white;
+}
+
+.dialog-table{
+    overflow-y: auto; /* Додавання вертикального скролу */
+    max-height: 200px; 
+    position: relative; /* Потрібно для позиціонування фонової смуги */
+}
+
+/* Стилі для повзунка */
+.dialog-table::-webkit-scrollbar-thumb {
+    background-color: red; /* Колір повзунка */
+    border-radius: 10px; /* Радіус кутів */
+}
+
+/* Стилі для фонової смуги */
+.dialog-table::-webkit-scrollbar-track {
+    background-color: #8a2be2; /* Колір фонової смуги */
+    border-radius: 10px; /* Радіус кутів */
+}
+
+</style>
+</head>
+<body>
+    <div class="window">
+        <div class="left-menu">
+
+        </div>
+        <div class="container">
+            <button onclick="openModalAddDoctor()">Додати лікаря</button>
+            <button onclick="openModalEditDoctor(3)">Редагувати лікаря</button>
+            <button onclick="openModalHistoryDoctor(3)">Історія лікаря</button>
+        </div>
+        <!-- Модальне вікно для додавання лікаря -->
+        <div id="myModalAddDoctor" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeModalAddDoctor()">&times;</span>
+                <h2 class="dialog-text">Додавання нового лікаря</h2>
+                <form action="/add-new-doctor" method="post">
+                    <div class="form-row">
+                        <input type="text" id="firstName" name="firstName" class="rounded-input" placeholder="Ім'я" required>
+                        <input type="text" id="lastName" name="lastName" class="rounded-input" placeholder="Прізвище" required>
+                    </div>
+                    <div class="form-row">
+                        <input type="text" id="patronic" name="patronymic" class="rounded-input" placeholder="По батькові" required>
+                        <input type="text" id="type" name="type" class="rounded-input" placeholder="Посада" required>
+                    </div>
+                    <div class="form-row">
+                        <input type="tel" id="phone" name="phone" class="rounded-input" placeholder="Телефон" required>
+                        <input type="email" id="email" name="email" class="rounded-input" placeholder="Пошта" required>
+                    </div>
+                    <div class="form-row">
+                        <input type="password" id="password" name="password" class="rounded-input" placeholder="Пароль" required>
+                    </div>
+                    <button class="add-doctor" type="submit">Надіслати</button>
+                </form>
+            </div>
+        </div>
+
+
+        <!-- Модальне вікно для редагування лікаря -->
+         @model DoctorViewModel
+        <div id="myModalEditDoctor" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeModalEditDoctor()">&times;</span>
+                <h2 class="dialog-text">Редагування лікаря</h2>
+                <form action="/save-edit-doctor" method="post">
+                    <div class="form-row">
+                         <input type="hidden" id="id" name="userId" class="rounded-input" placeholder="Ім'я" required>
+                        <input type="text" id="firstName2" name="firstName" class="rounded-input" placeholder="Ім'я" required  >
+                        <input type="text" id="lastName2" name="lastName" class="rounded-input" placeholder="Прізвище" required >
+                    </div>
+                    <div class="form-row">
+                        <input type="text" id="middleName2" name="patronymic" class="rounded-input" placeholder="По батькові" required>
+                        <input type="text" id="position2" name="type" class="rounded-input" placeholder="Посада" required>
+                    </div>
+                    <div class="form-row">
+                        <input type="tel" id="phone2" name="phone" class="rounded-input" placeholder="Телефон" required >
+                        <input type="email" id="email2" name="email" class="rounded-input" placeholder="Пошта" required >
+                    </div>
+                    <button class="add-doctor" type="submit">Зберегти</button>
+                </form>
+            </div>
+        </div>
+
+
+
+        <!-- Модальне вікно для історії лікаря -->
+        <div id="myModalHistoryDoctor" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModalHistoryDoctor()">&times;</span>
+        <h2 class="dialog-text">Історія записів</h2>
+        <div class="dialog-table">
+            <table id="historyTable" class="table-history">
+                <thead>
+                    <tr>
+                        <th>Ім'я</th>
+                        <th>Дата</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+
+
+                    
+                
+            </div>
+        </div>
+    </div>
+   
+
+
+    <script>
+
+    var modalAddDoctor = document.getElementById("myModalAddDoctor");
+    var modalEditDoctor = document.getElementById("myModalEditDoctor");
+    var modalHistoryDoctor = document.getElementById("myModalHistoryDoctor");
+
+    function openModalAddDoctor() {
+        modalAddDoctor.style.display = "block";
+        modalEditDoctor.style.display = "none"; // Закриваємо модальне вікно для редагування
+        modalHistoryDoctor.style.display = "none"; // Закриваємо модальне вікно для редагування
+    }
+
+    function closeModalAddDoctor() {
+        modalAddDoctor.style.display = "none";
+    }
+
+    function openModalEditDoctor(id) {
+        modalEditDoctor.style.display = "block";
+        modalAddDoctor.style.display = "none"; // Закриваємо модальне вікно для додавання
+        modalHistoryDoctor.style.display = "none"; 
+        // Закриваємо модальне вікно для додавання
+         fetch(`/edit-doctor/${id}`)
+            .then(response => response.json())
+            .then(userDTO => {
+                // Вставка отриманих даних у поля форми
+                document.getElementById("id").value = userDTO.userId;
+                document.getElementById("firstName2").value = userDTO.firstName;
+                document.getElementById("lastName2").value = userDTO.lastName;
+                document.getElementById("middleName2").value = userDTO.patronymic;
+                document.getElementById("position2").value = userDTO.type;
+                document.getElementById("phone2").value = userDTO.phone;
+                document.getElementById("email2").value = userDTO.email;
+            })
+            .catch(error => {
+                console.error('Error fetching data:', error);
+            });
+
+        
+    }
+
+    function closeModalEditDoctor() {
+        modalEditDoctor.style.display = "none";
+    }
+
+    function openModalHistoryDoctor(id) {
+        modalEditDoctor.style.display = "none";
+        modalAddDoctor.style.display = "none"; // Закриваємо модальне вікно для додавання
+        modalHistoryDoctor.style.display = "block"; 
+        fetch(`/history-doctor/${id}`)
+            .then(response => response.json())
+            .then(doctorViewModel => {
+                if (doctorViewModel && doctorViewModel.appointments) {
+                    const appointments = doctorViewModel.appointments;
+                    const tableBody = document.getElementById('historyTable').getElementsByTagName('tbody')[0];
+
+                    // Clear existing rows
+                    tableBody.innerHTML = '';
+
+                    // Fill table with data
+                    appointments.forEach(appointment => {
+                        const row = tableBody.insertRow();
+                        const nameCell = row.insertCell(0);
+                        const dateCell = row.insertCell(1);
+
+                        nameCell.textContent = appointment.name;
+                        dateCell.textContent = appointment.date;
+                    });
+                } else {
+                    console.error('No appointments data available.');
+                }
+            })
+            .catch(error => console.error('Error:', error));
+
+        
+    }
+    function fillTable(doctorViewModel) {
+        const appointments = doctorViewModel.Appointments;
+        const tableBody = document.getElementById('historyTable').getElementsByTagName('tbody')[0];
+        
+        // Clear existing rows
+        tableBody.innerHTML = '';
+
+        // Fill table with data
+        appointments.forEach(appointment => {
+            const row = tableBody.insertRow();
+            const nameCell = row.insertCell(0);
+            const dateCell = row.insertCell(1);
+            
+            nameCell.textContent = appointment.Name;
+            dateCell.textContent = appointment.Date;
+        });
+    }
+    function closeModalHistoryDoctor() {
+        modalHistoryDoctor.style.display = "none";
+    }
+
+    window.onclick = function(event) {
+        if (event.target == modalAddDoctor) {
+            closeModalAddDoctor();
+        } else if (event.target == modalEditDoctor) {
+            closeModalEditDoctor();
+        } else if (event.target == modalHistoryDoctor){
+            closeModalHistoryDoctor
+        }
+    }
+</script>
+
+</body>
+
+</html>

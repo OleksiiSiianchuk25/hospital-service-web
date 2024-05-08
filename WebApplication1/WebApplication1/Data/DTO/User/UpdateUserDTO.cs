@@ -1,9 +1,13 @@
-﻿namespace EF.DTO.User
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace EF.DTO.User
 {
     public class UpdateUserDTO
     {
+        [Required]
         public long UserId { get; set; }
-
+        [Required]
+        [EmailAddress]
         public string Email { get; set; } = null!;
 
         public string FirstName { get; set; } = null!;
@@ -37,5 +41,7 @@
             this.LastName = lastName;
             this.Phone = phone;
         }
+
+        public UpdateUserDTO() { }
     }
 }
