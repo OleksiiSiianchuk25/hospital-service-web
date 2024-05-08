@@ -8,6 +8,8 @@ using System.Security.Cryptography.X509Certificates;
 using EF;
 using NLog;
 using static Microsoft.ApplicationInsights.MetricDimensionNames.TelemetryContext;
+using WebApplication1.Data.models;
+using WebApplication1.Data.DTO.User;
 
 namespace WebApplication1.Controllers
 {
@@ -83,34 +85,67 @@ namespace WebApplication1.Controllers
         [Route("admin")]
         public IActionResult AdminPage()
         {
-            return View(); ;
+            return View();
         }
-    }
-}
 
-public class Appoint{
+        [HttpPost] // Цей атрибут вказує, що метод відповідає на POST-запити
+        [Route("/add-new-patient")]
+        public IActionResult AddNewPatient(UserRegistrationDTO model) // Параметр model буде автоматично заповнено з даних форми
+        {
+            _userService.RegisterPatient(model);
+            return Redirect("patient");
+        }
 
-    public string Name { get; set; }
-    public string Date { get; set; }
+        [HttpPost] // Цей атрибут вказує, що метод відповідає на POST-запити
+        [Route("/save-edit-patient")]
+        public IActionResult SaveEditPatient(UpdateUserDTO model) // Параметр model буде автоматично заповнено з даних форми
+        {
+            if (!ModelState.IsValid)
+            {
 
-    public Appoint(string name, string date)
-    {
+                return BadRequest(ModelState);
+            }
+            else
+            {
+                _userService.EditUser(model);
+            }
 
-        this.Name = name;
-        this.Date = date;
+            return Redirect("patient");
+        }
 
-    }
-}
+        [HttpGet]
+        [Route("/edit-patient/{id}")]
+        public IActionResult EditPatient(int id) // Параметр model буде автоматично заповнено з даних форми
+        {
+            EF.User model = _userService.FindById(id);
+            return Json(model);
 
-public class DoctorViewModel
-{
-    private EF.User user;
+        }
 
-    public List<Appoint> Appointments { get; set; }
+        [HttpGet]
+        [Route("/history-patient/{id}")]
+        public IActionResult GetPatientHistory(int id)
+        {
+            var docApp = _appointmentService.GetArchiveAppointmentsByUserId(id);
+            var historyData = new List<Appoint>(); // Передбачаючи, що тип Appoint відповідає типу записів історії
 
-    public DoctorViewModel(List<Appoint> appointments, EF.User user)
-    {
-        Appointments = appointments;
-        this.user = user;
+            foreach (var appointment in docApp)
+            {
+                var doctor = _userService.FindById(appointment.DoctorRef);
+                var data = appointment.DateAndTime;
+                historyData.Add(new Appoint(doctor.FirstName + " " + doctor.LastName + " " + doctor.Type, data.ToString("dd/MM/yyyy HH:mm")));
+            }
+
+            var model = new DoctorViewModel(historyData, _userService.FindById(id));
+
+            return Json(model);
+        }
+
+        [HttpGet]
+        [Route("patient")]
+        public IActionResult PatientPage()
+        {
+            return View();
+        }
     }
 }
