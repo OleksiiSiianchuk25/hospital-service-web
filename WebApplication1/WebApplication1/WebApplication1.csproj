@@ -23,6 +23,7 @@
   <ItemGroup>
     <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
     <PackageReference Include="Bogus" Version="35.5.0" />
+    <PackageReference Include="bootstrap" Version="5.3.3" />
     <PackageReference Include="EntityFrameworkCoreMock.Moq" Version="2.4.0" />
     <PackageReference Include="MailKit" Version="4.5.0" />
     <PackageReference Include="Microsoft.TestPlatform" Version="17.9.0" />

@@ -1,21 +1,26 @@
-﻿namespace EF.DTO.User
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace EF.DTO.User
 {
     public class UserDTO
     {
+        [Required]
         public long UserId { get; set; }
-
+        [Required]
+        [EmailAddress]
         public string Email { get; set; } = null!;
-
+        [Required]
         public string FirstName { get; set; } = null!;
-
+        [Required]
         public string LastName { get; set; } = null!;
-
+        [Required]
         public string Patronymic { get; set; } = null!;
-
+        [Required]
+        [Phone]
         public string Phone { get; set; } = null!;
-
+        [Required]
         public string Password { get; set; } = null!;
-
+        [Required]
         public string Type { get; set; }
 
         public UserDTO(string email, string firstName, string lastName, string patronymic, string phone, string password, string type)
@@ -33,13 +38,13 @@
         {
         }
 
-        public UserDTO(string email, string firstName, string lastName, string phone, string password)
+/*        public UserDTO(string email, string firstName, string lastName, string phone, string password)
         {
             this.Email = email;
             this.FirstName = firstName;
             this.LastName = lastName;
             this.Phone = phone;
             this.Password = password;
-        }
+        }*/
     }
 }
