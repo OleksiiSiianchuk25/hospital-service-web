@@ -131,7 +131,7 @@ namespace EF.service.impl
         public void ChangePasswordByEmail(string email)
         {
             User user = this.FindByEmail(email);
-            string newPassword = (this.GeneratePassoword());
+            string newPassword = this.GeneratePassoword();
             user.Password = BCrypt.Net.BCrypt.HashPassword(newPassword);
             this.SendEmailViaGmail(email, newPassword);
             this.context.SaveChanges();

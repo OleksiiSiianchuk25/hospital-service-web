@@ -9,13 +9,17 @@ namespace WebApplication1.Data.DTO.User
         [EmailAddress]
         [UniqueEmail]
         public string Email { get; set; }
+
         [Required]
         public string FirstName { get; set; }
+
         [Required]
         public string LastName { get; set; }
+
         [Required]
         [Phone]
         public string Phone { get; set; }
+
         [Required]
         public string Password { get; set; } 
 

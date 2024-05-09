@@ -1,0 +1,269 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Centered White Rectangle</title>
+<link href='https://fonts.googleapis.com/css?family=Rubik' rel='stylesheet'>
+<style>
+    body {
+        margin: 0;
+        padding: 0;
+        background-color: #D0D0D0; /* Сірий фон */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh; /* Висота вікна браузера */
+    }
+    .window {
+        width: 85%; /* Ширина прямокутника */
+        height: 85%; /* Висота прямокутника */
+        background-color: #ffffff; /* Білий колір */
+        display: flex;
+        /* Вирівнюємо елементи горизонтально */
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .container {
+        width: calc(80% - 0px); /* Ширина контейнера (з урахуванням відступу 10% з кожного боку) */
+        height: 100%; /* Висота контейнера */
+        background-color: #FFFFFF; /* Бірий колір */
+    }
+    .modal {
+        display: none; /* Початково прихований */
+        position: fixed;
+        z-index: 1;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0,0,0,0.4); /* Напівпрозорий фон */
+    }
+
+    .modal-edit {
+        display: none; /* Початково прихований */
+        position: fixed;
+        z-index: 1;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0,0,0,0.4); /* Напівпрозорий фон */
+    }
+
+    .modal-content {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 30%;
+    height: 50%;
+    border-radius: 20px;
+    background-color: #FFFFFF;
+    padding: 40px;
+    }
+
+
+    /* Закриття модального вікна */
+    .close {
+        color: #aaa;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+    }
+
+    .close:hover,
+    .close:focus {
+        color: black;
+        text-decoration: none;
+        cursor: pointer;
+    }
+    .form-group {
+    margin-bottom: 20px;
+}
+
+/* Заокруглення форм */
+.rounded-input {
+    border-radius: 20px;
+    border: 3px solid #AD99DA;
+    padding: 8px;
+    width: calc(100% - 16px);
+}
+
+/* Стилізація кнопки */
+button[type="submit"] {
+    border: none;
+    background-color: #AD99DA;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 10px;
+    cursor: pointer;
+    margin-left: auto;
+}
+
+/* Стилі для розділення на дві колонки */
+.form-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+/* Горизонтальний відступ між формами */
+.form-row input {
+    margin-right: 10px;
+}
+
+/* Стилі для кнопки */
+button[type="submit"] {
+    margin-top: -10px;
+
+}
+.dialog-text{
+    color: #B6AEE5;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.stats-header{
+    margin-left:48px;
+    margin-top:75px;
+    margin-bottom:0;
+    font-family:'Rubik';
+}
+
+.rectangle {
+width: 221px;
+height: 221px;
+margin-right: 25px;
+background: #B6AEE5;
+}
+
+.title-rectangle {
+    font-size:22px;
+    margin-left:12px;
+    margin-top:38px;
+    color:#FFFFFF;
+    font-family:Rubik;
+}
+
+.number-rectangle {
+    font-size:86px;
+    margin-right:14px;
+    margin-top:-23px;
+    color:#FFFFFF;
+    font-family:'Rubik';
+    text-align:right;
+}
+
+.menu-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.menu-item:hover {
+    cursor: pointer;
+}
+
+.menu-label {
+    margin-top: 3px;
+    font-family: Rubik;
+    font-size: 14px;
+    color: #fff;
+}
+
+.admin-label {
+    margin-top: 3px;
+    font-family: Rubik;
+    font-size: 20px;
+    color: #fff;
+}
+
+.left-menu {
+    width: 20%; /* Ширина лівого меню */
+    height: 100%; /* Висота лівого меню */
+    background-color: #403D49; /* Чорний колір */
+    display: flex;
+    flex-direction: column;
+}
+
+.menu-images {
+    margin-top: 12px;
+    margin-bottom: 14px;
+}
+
+.menu-img {
+    width: 52px; /* Змініть розмір зображення за потреби */
+    height: 52px; /* Змініть розмір зображення за потреби */
+}
+
+.admin-img {
+    width: 88px; /* Змініть розмір зображення за потреби */
+    height: 88px; /* Змініть розмір зображення за потреби */
+}
+
+a {
+    text-decoration: none;
+}
+
+</style>
+</head>
+<body>
+    <div class="window">
+        <div class="left-menu">
+            <div class="menu-images">
+            <div class="menu-item">
+                <img src="~/images/admin.svg" alt="Admin" class="admin-img">
+                <span class="admin-label">Адмін</span>
+            </div>
+            <a href="/api/doctors">
+                <div class="menu-item">
+                    <img src="~/images/doctors.svg" alt="Doctors" class="menu-img">
+                     <span class="menu-label">Лікарі</span>
+                </div>
+            </a>
+            <a href="/api/patients" class="menu-item">
+                <img src="~/images/patients.svg" alt="Patients" class="menu-img">
+                <span class="menu-label">Пацієнти</span>
+            </a>
+            <a href="/api/appointments" class="menu-item">
+                <img src="~/images/records.svg" alt="Records" class="menu-img">
+                <span class="menu-label">Записи</span>
+            </a>
+            <a href="stats" class="menu-item">
+                <img src="~/images/stats.svg" alt="Stats" class="menu-img">
+                <span class="menu-label">Статистика</span>
+            </a>
+            </div>
+        </div>
+
+
+        <div class="container">
+            <h1 class="stats-header">Статистика</h1>
+            <div style="display:flex; margin-top:35px; margin-left: 48px">
+                <div class="rectangle">
+                    <p class="title-rectangle"><b>Загальна кількість лікарів</b></p>
+                    <p class="number-rectangle"><b class="number">@ViewBag.DoctorCount</b></p>
+                </div>
+                <div class="rectangle">
+                    <p class="title-rectangle"><b>Загальна кількість пацієнтів</b></p>
+                    <p class="number-rectangle"><b class="number">@ViewBag.UserCount</b></p>
+                </div>
+                <div class="rectangle">
+                    <p class="title-rectangle"><b>Загальна кількість записів</b></p>
+                    <p class="number-rectangle"><b class="number">@ViewBag.AppointmentCount</b></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
