@@ -25,6 +25,9 @@ csharp_space_around_binary_operators = before_and_after
 dotnet_diagnostic.SA1201.severity = silent
 dotnet_diagnostic.SA1300.severity = silent
 
+# CS8602: Dereference of a possibly null reference.
+dotnet_diagnostic.CS8602.severity = none
+
 [*.{cs,vb}]
 dotnet_style_operator_placement_when_wrapping = beginning_of_line
 tab_width = 4

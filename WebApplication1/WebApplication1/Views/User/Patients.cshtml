@@ -1,0 +1,456 @@
+﻿@model X.PagedList.IPagedList<EF.User>
+@using X.PagedList.Mvc.Core;
+@{
+    ViewData["Title"] = "User Table Page";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Centered White Rectangle</title>
+<link href='https://fonts.googleapis.com/css?family=Rubik' rel='stylesheet'>
+<style>
+    body {
+        margin: 0;
+        padding: 0;
+        background-color: #D0D0D0; /* Сірий фон */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh; /* Висота вікна браузера */
+    }
+    .window {
+        width: 85%; /* Ширина прямокутника */
+        height: 85%; /* Висота прямокутника */
+        background-color: #ffffff; /* Білий колір */
+        display: flex;
+        /* Вирівнюємо елементи горизонтально */
+        justify-content: space-between;
+        align-items: center;
+    }
+    .left-menu {
+        width: 20%; /* Ширина лівого меню */
+        height: 100%; /* Висота лівого меню */
+        background-color: #403D49; /* Чорний колір */
+    }
+    .container {
+        width: calc(80% - 0px); /* Ширина контейнера (з урахуванням відступу 10% з кожного боку) */
+        height: 100%; /* Висота контейнера */
+        background-color: #FFFFFF; /* Бірий колір */
+        overflow: auto; 
+    }
+    .modal {
+        display: none; /* Початково прихований */
+        position: fixed;
+        z-index: 1;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0,0,0,0.4); /* Напівпрозорий фон */
+    }
+
+    .modal-edit {
+        display: none; /* Початково прихований */
+        position: fixed;
+        z-index: 1;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0,0,0,0.4); /* Напівпрозорий фон */
+    }
+
+    .modal-content {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 30%;
+    height: 50%;
+    border-radius: 20px;
+    background-color: #FFFFFF;
+    padding: 40px;
+    }
+
+
+    /* Закриття модального вікна */
+    .close {
+        color: #aaa;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+    }
+
+    .close:hover,
+    .close:focus {
+        color: black;
+        text-decoration: none;
+        cursor: pointer;
+    }
+    .form-group {
+    margin-bottom: 20px;
+}
+
+/* Заокруглення форм */
+.rounded-input {
+    border-radius: 20px;
+    border: 3px solid #AD99DA;
+    padding: 8px;
+    width: calc(100% - 16px);
+}
+
+/* Стилізація кнопки */
+button[type="submit"] {
+    border: none;
+    background-color: #AD99DA;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 10px;
+    cursor: pointer;
+    margin-left: auto;
+}
+
+/* Стилі для розділення на дві колонки */
+.form-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+/* Горизонтальний відступ між формами */
+.form-row input {
+    margin-right: 10px;
+}
+
+/* Стилі для кнопки */
+button[type="submit"] {
+    margin-top: -10px;
+
+}
+.dialog-text{
+    color: #B6AEE5;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.custom-table-container {
+    overflow: hidden; /* Відключаємо прокрутку таблиці */
+    margin: 35px 25px;
+}
+
+.custom-table {
+    table-layout: fixed;
+    width: 100%;
+}
+
+th, td {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    text-align: left;   
+    overflow: hidden;
+    font-size: 14px;
+}
+
+td {
+   padding-left:10px;
+   padding-top: 15px;
+   overflow: hidden;
+}
+
+th {
+    padding:10px;
+    background-color: #B6AEE5;
+    color: #FFFFFF;
+    text-decoration: none;
+}
+
+.th-href {
+    color: #FFFFFF;
+    text-decoration: none;
+}
+
+.th-href:hover {
+    color: #FFFFFF;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+tr:hover {
+    background-color: #ddd;
+}
+
+.vertical-line {
+    border-right: 2px solid #fff;
+}
+
+.table-img {
+    width: 35px;
+    height: 35px;
+}
+
+.table-btn-img {
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    padding-right: 8px;
+}
+
+.actions-col {
+    width: 25%;
+}
+
+.search-box {
+    display: flex;
+    align-items: center;
+    border: 1px solid #B6AEE5;
+    border-radius: 15px;
+    padding: 3px;
+    width: 180px;
+    margin-bottom: 10px;
+}
+
+.search-img {
+    width: 20px;
+    height: 20px;
+    padding-left: 8px;
+}
+
+.input-validation-error{
+    width:100%;
+    border: none;
+    outline: none;
+}
+
+.custom-pagination-list {
+    list-style-type: none;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+    text-decoration: none;
+}
+
+.custom-pagination-item {
+    margin: 0 5px;
+    padding: 5px 10px;
+    background-color: #EFEFEF;
+    color: #AD99DA;
+    border-radius: 25px;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.custom-pagination-item a {
+    color: #AD99DA; /* Set the color for pagination numbers */
+    text-decoration: none; /* Remove underline */
+}
+
+.custom-pagination-item.active {
+    background-color: #AD99DA;
+    color: white;
+}
+
+.custom-pagination-item.prev,
+.custom-pagination-item.next {
+    background-color: white; /* Remove background */
+}
+
+.stats-header{
+    margin-left:48px;
+    margin-top:75px;
+    margin-bottom:0;
+    font-family:'Rubik';
+}
+
+.rectangle {
+width: 221px;
+height: 221px;
+margin-right: 25px;
+background: #B6AEE5;
+}
+
+.title-rectangle {
+    font-size:22px;
+    margin-left:12px;
+    margin-top:38px;
+    color:#FFFFFF;
+    font-family:Rubik;
+}
+
+.number-rectangle {
+    font-size:86px;
+    margin-right:14px;
+    margin-top:-23px;
+    color:#FFFFFF;
+    font-family:'Rubik';
+    text-align:right;
+}
+
+.menu-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.menu-item:hover {
+    cursor: pointer;
+}
+
+.left-menu {
+    width: 20%; /* Ширина лівого меню */
+    height: 100%; /* Висота лівого меню */
+    background-color: #403D49; /* Чорний колір */
+    display: flex;
+    flex-direction: column;
+}
+
+.menu-images {
+    margin-top: 12px;
+    margin-bottom: 14px;
+}
+
+.menu-img {
+    width: 52px; /* Змініть розмір зображення за потреби */
+    height: 52px; /* Змініть розмір зображення за потреби */
+}
+
+.admin-img {
+    width: 88px; /* Змініть розмір зображення за потреби */
+    height: 88px; /* Змініть розмір зображення за потреби */
+}
+
+a {
+    text-decoration: none;
+}
+
+.menu-label {
+    margin-top: 3px;
+    font-family: Rubik;
+    font-size: 14px;
+    color: #fff;
+}
+
+.admin-label {
+    margin-top: 3px;
+    font-family: Rubik;
+    font-size: 20px;
+    color: #fff;
+}
+
+.search-box input {
+    flex-grow: 1;
+    border: none; /* Removes default input border */
+    outline: none; /* Removes focus outline */
+    font-family: 'Rubik', sans-serif;
+    font-size: 16px; /* Adjust font size as needed */
+    color: #666666; /* Adjust text color as needed */
+    background-color: transparent; /* Ensures no background color */
+}
+
+</style>
+</head>
+<body>
+    <div class="window">
+<div class="left-menu">
+            <div class="menu-images">
+            <div class="menu-item">
+                <img src="~/images/admin.svg" alt="Admin" class="admin-img">
+                <span class="admin-label">Адмін</span>
+            </div>
+            <a href="/api/doctors">
+                <div class="menu-item">
+                    <img src="~/images/doctors.svg" alt="Doctors" class="menu-img">
+                     <span class="menu-label">Лікарі</span>
+                </div>
+            </a>
+            <a href="/api/patients" class="menu-item">
+                <img src="~/images/patients.svg" alt="Patients" class="menu-img">
+                <span class="menu-label">Пацієнти</span>
+            </a>
+            <a href="/api/appointments" class="menu-item">
+                <img src="~/images/records.svg" alt="Records" class="menu-img">
+                <span class="menu-label">Записи</span>
+            </a>
+            <a href="/stats" class="menu-item">
+                <img src="~/images/stats.svg" alt="Stats" class="menu-img">
+                <span class="menu-label">Статистика</span>
+            </a>
+            </div>
+        </div>
+        <div class="container">
+            <div class="custom-table-container">
+                @using (Html.BeginForm())
+                {
+                            <div  class="search-box">
+                                <img src="~/images/search.svg" alt="Stats" class="search-img">
+                        @Html.TextBox("searchString")  
+                            </div>
+                }
+
+                <table class="custom-table">
+                    <thead>
+                        <tr>
+                            <th>
+                                <a class="th-href" href="@Url.Action("Patients", new { sortOrder = ViewBag.LastNameSortParm, currentFilter=ViewBag.CurrentFilter })">Пацієнт</a>
+                            </th>
+                            <th>
+                                <a class="th-href" href="@Url.Action("Patients", new { sortOrder = ViewBag.PhoneSortParm, currentFilter=ViewBag.CurrentFilter })">Номер телефону</a>
+                            </th>
+                            <th>
+                                <a class="th-href" href="@Url.Action("Patients", new { sortOrder = ViewBag.EmailSortParm, currentFilter=ViewBag.CurrentFilter })">Пошта</a>
+                            </th>
+                            <th colspan="3" class="actions-col">Actions</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        @foreach (var patient in Model)
+                        {
+                                    <tr>
+                                        <td>
+                                    @Html.DisplayFor(modelItem => patient.LastName) @Html.DisplayFor(modelItem => patient.FirstName)<br />
+                                    @Html.DisplayFor(modelItem => patient.Patronymic)
+                                        </td>
+                                        <td>@Html.DisplayFor(modelItem => patient.Phone)</td>
+                                        <td>@Html.DisplayFor(modelItem => patient.Email)</td>
+                                        <td>
+                                               <a class="table-btn-img" asp-controller="Users" asp-action="Edit" asp-route-id="@patient.UserId">
+                                                    <img src="~/images/history.svg" alt="Stats" class="table-img">
+                                               </a>
+                                        </td>
+                                        <td>
+                                            <a class="table-btn-img" asp-controller="Users" asp-action="Delete" asp-route-id="@patient.UserId">
+                                                    <img src="~/images/edit.svg" alt="Stats" class="table-img">
+                                            </a>
+                                        </td>
+                                        <td>
+                                            <a class="table-btn-img" asp-controller="Users" asp-action="Delete" asp-route-id="@patient.UserId">
+                                                    <img src="~/images/delete.svg" alt="Stats" class="table-img">
+                                            </a>
+                                        </td>
+                                    </tr>
+                        }
+                        </tbody>
+                    </table>
+                <div class="pagination-container">
+                    @Html.PagedListPager(Model, page => Url.Action("Patients", new { page, sortOrder = ViewBag.LastNameSortParm }), 
+                        new PagedListRenderOptions { 
+                            LiElementClasses = new string[] { "custom-pagination-item" }, 
+                            UlElementClasses = new string[] { "custom-pagination-list" },
+                            Display = PagedListDisplayMode.IfNeeded,
+                            LinkToPreviousPageFormat = "<",
+                            LinkToNextPageFormat = ">"
+                        })
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

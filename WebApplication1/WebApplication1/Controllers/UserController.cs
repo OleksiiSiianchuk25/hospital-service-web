@@ -1,11 +1,11 @@
 ﻿using EF;
-using EF.DTO.User;
 using EF.service;
 using EF.service.@interface;
 using Microsoft.AspNetCore.Mvc;
 using NLog;
 using WebApplication1.Data;
 using WebApplication1.Data.DTO.User;
+using X.PagedList;
 
 namespace WebApplication1.Controllers
 {
@@ -15,12 +15,14 @@ namespace WebApplication1.Controllers
     {
         private readonly IUserService userService;
         private readonly IRoleService roleService;
+        private readonly IAppointmentService appointmentService;
         private readonly Logger logger;
 
-        public UserController(IUserService userService,IRoleService roleService)
+        public UserController(IUserService userService,IRoleService roleService, IAppointmentService appointmentService)
         {
             this.userService = userService;
             this.roleService = roleService;
+            this.appointmentService = appointmentService;
             this.logger = LogManager.GetCurrentClassLogger();
         }
 
@@ -28,36 +30,36 @@ namespace WebApplication1.Controllers
         [Route("login")]
         public IActionResult Login()
         {
-            logger.Info("Returning Login page");
-            return View();
+            this.logger.Info("Returning Login page");
+            return this.View();
         }
 
         [HttpGet]
         [Route("registration")]
         public IActionResult Registration()
         {
-            logger.Info("Returning Registration page");
-            return View(new UserRegistrationDTO());
+            this.logger.Info("Returning Registration page");
+            return this.View(new UserRegistrationDTO());
         }
 
         [HttpPost]
         [Route("registration")]
         public IActionResult Registration(UserRegistrationDTO user)
         {
-            if (!ModelState.IsValid)
+            if (!this.ModelState.IsValid)
             {
-                logger.Warn("User fields are invalid");
+                this.logger.Warn("User fields are invalid");
 
-                return BadRequest(ModelState);
+                return this.BadRequest(this.ModelState);
             }
             else
             {
-                userService.RegisterPatient(user);
-                logger.Info("Success registariton new Patient");
+                this.userService.RegisterPatient(user);
+                this.logger.Info("Success registariton new Patient");
             }
 
-            logger.Info("Returning Login page");
-            return Redirect("/api/login");
+            this.logger.Info("Returning Login page");
+            return this.Redirect("/api/login");
         }
 
 
@@ -71,12 +73,12 @@ namespace WebApplication1.Controllers
             User user;
             try
             {
-                user = userService.FindByEmail(email);
+                user = this.userService.FindByEmail(email);
             }
             catch (Exception ex)
             {
-                logger.Warn($"User with email:{email} not found");
-                return View();
+                this.logger.Warn($"User with email:{email} not found");
+                return this.View();
             }
 
             string salt = BCrypt.Net.BCrypt.GenerateSalt();
@@ -84,27 +86,27 @@ namespace WebApplication1.Controllers
             bool passwordMatch = BCrypt.Net.BCrypt.Verify(password, user.Password);
             if (!passwordMatch)
             {
-                logger.Warn($"Incorrect password for user{email}");
-                return View();
+                this.logger.Warn($"Incorrect password for user{email}");
+                return this.View();
             }
             else
             {
                 Context.UserId = user.UserId;
-                logger.Info($"Setted new UserId:{user.UserId}");
-                if (user.RoleRef == roleService.GetPatientRole().RoleId)
+                this.logger.Info($"Setted new UserId:{user.UserId}");
+                if (user.RoleRef == this.roleService.GetPatientRole().RoleId)
                 {
-                    logger.Info("Redirecting to patient page");
-                    return Redirect("/patient");
+                    this.logger.Info("Redirecting to patient page");
+                    return this.Redirect("/patient");
                 } 
-                else if(user.RoleRef == roleService.GetDoctorRole().RoleId)
+                else if(user.RoleRef == this.roleService.GetDoctorRole().RoleId)
                 {
-                    logger.Info("Redirecting to doctor page");
-                    return Redirect("/doctor");
+                    this.logger.Info("Redirecting to doctor page");
+                    return this.Redirect("/doctor");
                 }
                 else
                 {
-                    logger.Info("Redirecting to admin page");
-                    return Redirect("/admin");
+                    this.logger.Info("Redirecting to admin page");
+                    return this.Redirect("/admin");
                 }
             }
         }
@@ -113,8 +115,8 @@ namespace WebApplication1.Controllers
         [Route("forgot-password")]
         public IActionResult ForgotPassword()
         {
-            logger.Info("Returning ForgotPassword page");
-            return View();
+            this.logger.Info("Returning ForgotPassword page");
+            return this.View();
         }
 
         [HttpPost]
@@ -123,17 +125,268 @@ namespace WebApplication1.Controllers
         {
             try
             {
-                userService.ChangePasswordByEmail(email);
+                this.userService.ChangePasswordByEmail(email);
             }
             catch (Exception ex)
             {
-                logger.Warn($"User with email:{email} not found");
-                return View();
+                this.logger.Warn($"User with email:{email} not found");
+                return this.View();
             }
-            logger.Info($"Password for user:{email} was successfully changed");
-            logger.Info("Returning Login page");
 
-            return Redirect("/api/login");
+            this.logger.Info($"Password for user:{email} was successfully changed");
+            this.logger.Info("Returning Login page");
+
+            return this.Redirect("/api/login");
+        }
+
+        [HttpPost]
+        [HttpGet]
+        [Route("doctors")]
+        public IActionResult Index(string sortOrder, string currentFilter, string searchString, int? page)
+        {
+            this.ViewBag.CurrentSort = sortOrder;
+            this.ViewBag.LastNameSortParm = string.IsNullOrEmpty(sortOrder) ? "lastname_desc" : "";
+            this.ViewBag.PhoneSortParm = sortOrder == "Phone" ? "phone_desc" : "Phone";
+            this.ViewBag.EmailSortParm = sortOrder == "Email" ? "email_desc" : "Email";
+
+            if (searchString != null)
+            {
+                page = 1;
+            }
+            else
+            {
+                searchString = currentFilter;
+            }
+
+            this.ViewBag.CurrentFilter = searchString;
+
+            var doctors = this.userService.GetDoctors();
+
+            if (!string.IsNullOrEmpty(searchString))
+            {
+                doctors = doctors.Where(d => d.LastName.Contains(searchString) ||
+                d.FirstName.Contains(searchString) ||
+                d.Email.Contains(searchString) ||
+                d.Phone.Contains(searchString)).ToList();
+            }
+
+            switch (sortOrder)
+            {
+                case "lastname_desc":
+                    doctors = doctors.OrderByDescending(d => d.LastName).ToList();
+                    break;
+                case "Phone":
+                    doctors = doctors.OrderBy(d => d.Phone).ToList();
+                    break;
+                case "phone_desc":
+                    doctors = doctors.OrderByDescending(d => d.Phone).ToList();
+                    break;
+                case "Email":
+                    doctors = doctors.OrderBy(d => d.Email).ToList();
+                    break;
+                case "email_desc":
+                    doctors = doctors.OrderByDescending(d => d.Email).ToList();
+                    break;
+                default:
+                    doctors = doctors.OrderBy(d => d.LastName).ToList();
+                    break;
+            }
+
+            int pageSize = 5;
+            int pageNumber = page ?? 1;
+            return this.View(doctors.ToPagedList(pageNumber, pageSize));
+        }
+
+        [HttpPost]
+        [HttpGet]
+        [Route("patients")]
+        public IActionResult Patients(string sortOrder, string currentFilter, string searchString, int? page)
+        {
+            this.ViewBag.CurrentSort = sortOrder;
+            this.ViewBag.LastNameSortParm = string.IsNullOrEmpty(sortOrder) ? "lastname_desc" : "";
+            this.ViewBag.PhoneSortParm = sortOrder == "Phone" ? "phone_desc" : "Phone";
+            this.ViewBag.EmailSortParm = sortOrder == "Email" ? "email_desc" : "Email";
+
+            if (searchString != null)
+            {
+                page = 1;
+            }
+            else
+            {
+                searchString = currentFilter;
+            }
+
+            this.ViewBag.CurrentFilter = searchString;
+
+            var patients = this.userService.GetPatients();
+
+            if (!string.IsNullOrEmpty(searchString))
+            {
+                patients = patients.Where(d => d.LastName.Contains(searchString) ||
+                d.FirstName.Contains(searchString) ||
+                d.Email.Contains(searchString) ||
+                d.Phone.Contains(searchString)).ToList();
+            }
+
+            switch (sortOrder)
+            {
+                case "lastname_desc":
+                    patients = patients.OrderByDescending(d => d.LastName).ToList();
+                    break;
+                case "Phone":
+                    patients = patients.OrderBy(d => d.Phone).ToList();
+                    break;
+                case "phone_desc":
+                    patients = patients.OrderByDescending(d => d.Phone).ToList();
+                    break;
+                case "Email":
+                    patients = patients.OrderBy(d => d.Email).ToList();
+                    break;
+                case "email_desc":
+                    patients = patients.OrderByDescending(d => d.Email).ToList();
+                    break;
+                default:
+                    patients = patients.OrderBy(d => d.LastName).ToList();
+                    break;
+            }
+
+            int pageSize = 5;
+            int pageNumber = page ?? 1;
+            return this.View(patients.ToPagedList(pageNumber, pageSize));
+        }
+
+        [HttpPost]
+        [HttpGet]
+        [Route("patient/{userId}")]
+        public IActionResult PatientAppointments(int userId, string sortOrder, string currentFilter, string searchString, int? page)
+        {
+            this.ViewBag.CurrentSort = sortOrder;
+            this.ViewBag.DateSortParm = string.IsNullOrEmpty(sortOrder) ? "date_desc" : "";
+            this.ViewBag.DoctorSortParm = sortOrder == "Doctor" ? "doctor_desc" : "Doctor";
+            this.ViewBag.StatusSortParm = sortOrder == "status" ? "status_desc" : "status";
+
+            if (searchString != null)
+            {
+                page = 1;
+            }
+            else
+            {
+                searchString = currentFilter;
+            }
+
+            this.ViewBag.CurrentFilter = searchString;
+
+            var appointments = this.appointmentService.GetAppointmentsByUserId(userId).AsQueryable();
+
+            if (!string.IsNullOrEmpty(searchString))
+            {
+                appointments = appointments.Where(s => s.DoctorRefNavigation.LastName.Contains(searchString)
+                                               || s.DoctorRefNavigation.FirstName.Contains(searchString)
+                                               || s.DoctorRefNavigation.Patronymic.Contains(searchString)
+                                               || s.Status.Contains(searchString)
+                                               || s.Message.Contains(searchString));
+            }
+
+            switch (sortOrder)
+            {
+                case "date_desc":
+                    appointments = appointments.OrderByDescending(s => s.DateAndTime);
+                    break;
+                case "Doctor":
+                    appointments = appointments.OrderBy(s => s.DoctorRefNavigation.LastName);
+                    break;
+                case "doctor_desc":
+                    appointments = appointments.OrderByDescending(s => s.DoctorRefNavigation.LastName);
+                    break;
+                case "status":
+                    appointments = appointments.OrderBy(s => s.Status);
+                    break;
+                case "status_desc":
+                    appointments = appointments.OrderByDescending(s => s.Status);
+                    break;
+                default:
+                    appointments = appointments.OrderBy(s => s.DateAndTime);
+                    break;
+            }
+
+            int pageSize = 5;
+            int pageNumber = page ?? 1;
+
+            var nearestAppointment = this.appointmentService.GetAppointmentsByUserId(userId)
+                        .Where(a => a.DateAndTime > DateTime.Now)
+                        .OrderBy(a => a.DateAndTime)
+                        .FirstOrDefault();
+
+            this.ViewBag.NearestAppointment = nearestAppointment;
+
+            return this.View(appointments.ToPagedList(pageNumber, pageSize));
+        }
+
+        [HttpPost]
+        [HttpGet]
+        [Route("doctor/{userId}")]
+        public IActionResult DoctorAppointments(int userId, string sortOrder, string currentFilter, string searchString, int? page)
+        {
+            this.ViewBag.CurrentSort = sortOrder;
+            this.ViewBag.DateSortParm = string.IsNullOrEmpty(sortOrder) ? "date_desc" : "";
+            this.ViewBag.PatientSortParm = sortOrder == "Patient" ? "patient_desc" : "Patient";
+            this.ViewBag.StatusSortParm = sortOrder == "status" ? "status_desc" : "status";
+
+            if (searchString != null)
+            {
+                page = 1;
+            }
+            else
+            {
+                searchString = currentFilter;
+            }
+
+            this.ViewBag.CurrentFilter = searchString;
+
+            var appointments = this.appointmentService.GetAppointmentsByUserId(userId).AsQueryable();
+
+            if (!string.IsNullOrEmpty(searchString))
+            {
+                appointments = appointments.Where(s => s.DoctorRefNavigation.LastName.Contains(searchString)
+                                               || s.DoctorRefNavigation.FirstName.Contains(searchString)
+                                               || s.DoctorRefNavigation.Patronymic.Contains(searchString)
+                                               || s.Status.Contains(searchString)
+                                               || s.Message.Contains(searchString));
+            }
+
+            switch (sortOrder)
+            {
+                case "date_desc":
+                    appointments = appointments.OrderByDescending(s => s.DateAndTime);
+                    break;
+                case "Patient":
+                    appointments = appointments.OrderBy(s => s.DoctorRefNavigation.LastName);
+                    break;
+                case "patient_desc":
+                    appointments = appointments.OrderByDescending(s => s.DoctorRefNavigation.LastName);
+                    break;
+                case "status":
+                    appointments = appointments.OrderBy(s => s.Status);
+                    break;
+                case "status_desc":
+                    appointments = appointments.OrderByDescending(s => s.Status);
+                    break;
+                default:
+                    appointments = appointments.OrderBy(s => s.DateAndTime);
+                    break;
+            }
+
+            int pageSize = 5;
+            int pageNumber = page ?? 1;
+
+            var nearestAppointment = this.appointmentService.GetAppointmentsByUserId(userId)
+                        .Where(a => a.DateAndTime > DateTime.Now)
+                        .OrderBy(a => a.DateAndTime)
+                        .FirstOrDefault();
+
+            this.ViewBag.NearestAppointment = nearestAppointment;
+
+            return this.View(appointments.ToPagedList(pageNumber, pageSize));
         }
     }
 }
