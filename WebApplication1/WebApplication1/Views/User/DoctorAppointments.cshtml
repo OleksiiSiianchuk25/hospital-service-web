@@ -1,4 +1,4 @@
-﻿@model X.PagedList.IPagedList<EF.Appointment>
+﻿@using WebApplication1.Data.models;
 @using X.PagedList.Mvc.Core;
 @{
     ViewData["Title"] = "User Appointment Table Page";
@@ -41,102 +41,148 @@
         background-color: #FFFFFF; /* Бірий колір */
         overflow: auto; 
     }
-    .modal {
-        display: none; /* Початково прихований */
-        position: fixed;
-        z-index: 1;
-        left: 0;
-        top: 0;
-        width: 100%;
-        height: 100%;
-        overflow: auto;
-        background-color: rgba(0,0,0,0.4); /* Напівпрозорий фон */
-    }
+        /*ЗДРАВИЙ КОД*/
+        .modal {
+            display: none; /* Початково прихований */
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.4); /* Напівпрозорий фон */
+        }
 
-    .modal-edit {
-        display: none; /* Початково прихований */
-        position: fixed;
-        z-index: 1;
-        left: 0;
-        top: 0;
-        width: 100%;
-        height: 100%;
-        overflow: auto;
-        background-color: rgba(0,0,0,0.4); /* Напівпрозорий фон */
-    }
+        .modal-edit {
+            display: none; /* Початково прихований */
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.4); /* Напівпрозорий фон */
+        }
 
-    .modal-content {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 30%;
-    height: 50%;
-    border-radius: 20px;
-    background-color: #FFFFFF;
-    padding: 40px;
-    }
+        .modal-content {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 30%;
+            height: 50%;
+            border-radius: 20px;
+            background-color: #FFFFFF;
+            padding: 40px;
+        }
 
 
-    /* Закриття модального вікна */
-    .close {
-        color: #aaa;
-        float: right;
-        font-size: 28px;
-        font-weight: bold;
-    }
+        /* Закриття модального вікна */
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
 
-    .close:hover,
-    .close:focus {
-        color: black;
-        text-decoration: none;
-        cursor: pointer;
-    }
-    .form-group {
-    margin-bottom: 20px;
-}
+            .close:hover,
+            .close:focus {
+                color: black;
+                text-decoration: none;
+                cursor: pointer;
+            }
 
-/* Заокруглення форм */
-.rounded-input {
-    border-radius: 20px;
-    border: 3px solid #AD99DA;
-    padding: 8px;
-    width: calc(100% - 16px);
-}
+        .form-group {
+            margin-bottom: 20px;
+        }
 
-/* Стилізація кнопки */
-button[type="submit"] {
-    border: none;
-    background-color: #AD99DA;
-    color: white;
-    padding: 10px 20px;
-    border-radius: 10px;
-    cursor: pointer;
-    margin-left: auto;
-}
+        /* Заокруглення форм */
+        .rounded-input {
+            border-radius: 20px;
+            border: 3px solid #AD99DA;
+            padding: 8px;
+            width: calc(100% - 16px);
+        }
 
-/* Стилі для розділення на дві колонки */
-.form-row {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 20px;
-}
+        /* Стилізація кнопки */
+        button[type="submit"] {
+            border: none;
+            background-color: #AD99DA;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            margin-left: auto;
+        }
 
-/* Горизонтальний відступ між формами */
-.form-row input {
-    margin-right: 10px;
-}
+        /* Стилі для розділення на дві колонки */
+        .form-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
 
-/* Стилі для кнопки */
-button[type="submit"] {
-    margin-top: -10px;
+            /* Горизонтальний відступ між формами */
+            .form-row input {
+                margin-right: 10px;
+            }
 
-}
-.dialog-text{
-    color: #B6AEE5;
-    font-size: 24px;
-    font-weight: bold;
-}
+        /* Стилі для кнопки */
+        button[type="submit"] {
+            margin-top: -10px;
+        }
+
+        .dialog-text {
+            color: #B6AEE5;
+            font-size: 24px;
+            font-weight: bold;
+        }
+        /* Стилі для таблиці */
+        /* Стилі для таблиці */
+        .table-history {
+            width: 90%; /* Ширина таблиці */
+            margin: 0 auto; /* Вирівнювання по центру */
+            border-collapse: collapse; /* Злиття меж між комірками */
+            overflow-y: auto; /* Додавання вертикального скролу */
+            max-height: 100px; /* Максимальна висота таблиці */
+        }
+
+
+            /* Стилі для заголовків таблиці */
+            .table-history th {
+                font-weight: bold; /* Жирний шрифт */
+                border-bottom: 1px solid #ccc; /* Горизонтальна лінія між заголовками і рядками */
+                padding: 10px; /* Відступи від тексту до межі комірки */
+                background-color: white;
+            }
+
+            /* Стилі для комірок таблиці */
+            .table-history td {
+                border-bottom: 1px solid #ccc; /* Горизонтальна лінія між рядками */
+                padding: 10px; /* Відступи від тексту до межі комірки */
+                background-color: white;
+            }
+
+        .dialog-table {
+            overflow-y: auto; /* Додавання вертикального скролу */
+            max-height: 200px;
+            position: relative; /* Потрібно для позиціонування фонової смуги */
+        }
+
+            /* Стилі для повзунка */
+            .dialog-table::-webkit-scrollbar-thumb {
+                background-color: red; /* Колір повзунка */
+                border-radius: 10px; /* Радіус кутів */
+            }
+
+            /* Стилі для фонової смуги */
+            .dialog-table::-webkit-scrollbar-track {
+                background-color: #8a2be2; /* Колір фонової смуги */
+                border-radius: 10px; /* Радіус кутів */
+            }
+        /*КІНЕЦЬ ЗДРАВОГО КОДУ*/
 
 .custom-table-container {
     overflow: hidden; /* Відключаємо прокрутку таблиці */
@@ -426,7 +472,7 @@ a {
         </div>
 
         <div class="container">
-
+            @model DoctorViewModel
             <div class="nearest-appointment">
                 <h2>Найближчий запис</h2>
                 @if (ViewBag.NearestAppointment != null)
@@ -480,7 +526,7 @@ a {
                     </thead>
 
                     <tbody>
-                        @foreach (var appointment in Model)
+                        @foreach (var appointment in Model.IAppointment)
                         {
                                 <tr>
                                     <td>
@@ -496,7 +542,7 @@ a {
                         </tbody>
                     </table>
                 <div class="pagination-container">
-                    @Html.PagedListPager(Model, page => Url.Action("DoctorAppointments", new { page, sortOrder = ViewBag.LastNameSortParm }), 
+                    @Html.PagedListPager(Model.IAppointment, page => Url.Action("DoctorAppointments", new { page, sortOrder = ViewBag.LastNameSortParm }), 
                         new PagedListRenderOptions { 
                             LiElementClasses = new string[] { "custom-pagination-item" }, 
                             UlElementClasses = new string[] { "custom-pagination-list" },
@@ -508,6 +554,11 @@ a {
             </div>
         </div>
     </div>
+
+    
+
+
+
 </body>
 
 </html>

@@ -278,7 +278,7 @@ button[type="submit"] {
    
 
 
-    <script>
+<script>
 
     var modalAddDoctor = document.getElementById("myModalAddDoctor");
     var modalEditDoctor = document.getElementById("myModalEditDoctor");
@@ -324,7 +324,7 @@ button[type="submit"] {
 
     function openModalHistoryDoctor(id) {
         modalEditDoctor.style.display = "none";
-        modalAddDoctor.style.display = "none"; // Закриваємо модальне вікно для додавання
+        modalAddDoctor.style.display = "none";
         modalHistoryDoctor.style.display = "block"; 
         fetch(`/history-doctor/${id}`)
             .then(response => response.json())

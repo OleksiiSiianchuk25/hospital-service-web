@@ -3,6 +3,7 @@ using EF.service;
 using Microsoft.AspNetCore.Mvc;
 using NLog;
 using X.PagedList;
+using WebApplication1.Data.models;
 
 namespace WebApplication1.Controllers
 {
@@ -72,7 +73,7 @@ namespace WebApplication1.Controllers
             int pageSize = 5;
             int pageNumber = page ?? 1;
 
-            return this.View(appointments.ToPagedList(pageNumber, pageSize));
+            return this.View(new DoctorViewModel(null, null,appointments.ToPagedList(pageNumber, pageSize)));
         }
     }
 }

@@ -34,5 +34,9 @@
             this.PatientRef = patientRef;
             this.DoctorRef = doctorRef;
         }
+        public String print()
+        {
+            return (DoctorRef + " " + PatientRef + " " + DateAndTime);
+        }
     }
 }
