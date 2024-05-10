@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using WebApplication1.Data.DTO.User.Validity;
 
 namespace EF.DTO.User
 {
@@ -7,17 +8,19 @@ namespace EF.DTO.User
         [Required]
         public long UserId { get; set; }
         [Required]
+        [UniqueEmail]
         [EmailAddress]
         public string Email { get; set; } = null!;
-
+        [Required]
         public string FirstName { get; set; } = null!;
-
+        [Required]
         public string LastName { get; set; } = null!;
-
+        [Required]
         public string Patronymic { get; set; } = null!;
-
+        [Required]
+        [Phone]
         public string Phone { get; set; } = null!;
-
+        [Required]
         public string Type { get; set; } = null!;
 
         // Doctor

@@ -3,6 +3,7 @@ using EF.service;
 using Microsoft.AspNetCore.Mvc;
 using NLog;
 using X.PagedList;
+using WebApplication1.Data.models;
 
 namespace WebApplication1.Controllers
 {
@@ -43,8 +44,7 @@ namespace WebApplication1.Controllers
                     s.PatientRefNavigation.LastName.Contains(searchString) ||
                     s.DoctorRefNavigation.FirstName.Contains(searchString) ||
                     s.DoctorRefNavigation.LastName.Contains(searchString) ||
-                    s.DateAndTime.ToString().Contains(searchString) ||
-                    s.Message.Contains(searchString)).ToList();
+                    s.DateAndTime.ToString().Contains(searchString)).ToList();
             }
 
             switch (sortOrder)
@@ -72,7 +72,7 @@ namespace WebApplication1.Controllers
             int pageSize = 5;
             int pageNumber = page ?? 1;
 
-            return this.View(appointments.ToPagedList(pageNumber, pageSize));
+            return this.View(new DoctorViewModel(null, null,appointments.ToPagedList(pageNumber, pageSize)));
         }
     }
 }

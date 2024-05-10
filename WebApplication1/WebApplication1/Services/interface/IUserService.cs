@@ -1,4 +1,5 @@
 ﻿using EF.DTO.User;
+using WebApplication1.Data.DTO.Patient;
 using WebApplication1.Data.DTO.User;
 
 namespace EF.service
@@ -14,6 +15,8 @@ namespace EF.service
         void RegisterDoctor(UserDTO registerUser);
 
         void EditUser(UpdateUserDTO user);
+
+        void EditPatient(EditPatientDTO user);
 
         void DeleteById(long id);
 

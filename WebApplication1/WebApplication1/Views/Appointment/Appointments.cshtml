@@ -1,4 +1,4 @@
-﻿@model X.PagedList.IPagedList<EF.Appointment>
+﻿@using WebApplication1.Data.models;
 @using X.PagedList.Mvc.Core;
 @{
     ViewData["Title"] = "User Table Page";
@@ -7,394 +7,445 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Centered White Rectangle</title>
-<link href='https://fonts.googleapis.com/css?family=Rubik' rel='stylesheet'>
-<style>
-    body {
-        margin: 0;
-        padding: 0;
-        background-color: #D0D0D0; /* Сірий фон */
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100vh; /* Висота вікна браузера */
-    }
-    .window {
-        width: 85%; /* Ширина прямокутника */
-        height: 85%; /* Висота прямокутника */
-        background-color: #ffffff; /* Білий колір */
-        display: flex;
-        /* Вирівнюємо елементи горизонтально */
-        justify-content: space-between;
-        align-items: center;
-    }
-    .left-menu {
-        width: 20%; /* Ширина лівого меню */
-        height: 100%; /* Висота лівого меню */
-        background-color: #403D49; /* Чорний колір */
-    }
-    .container {
-        width: calc(80% - 0px); /* Ширина контейнера (з урахуванням відступу 10% з кожного боку) */
-        height: 100%; /* Висота контейнера */
-        background-color: #FFFFFF; /* Бірий колір */
-        overflow: auto; 
-    }
-    .modal {
-        display: none; /* Початково прихований */
-        position: fixed;
-        z-index: 1;
-        left: 0;
-        top: 0;
-        width: 100%;
-        height: 100%;
-        overflow: auto;
-        background-color: rgba(0,0,0,0.4); /* Напівпрозорий фон */
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Centered White Rectangle</title>
+    <link href='https://fonts.googleapis.com/css?family=Rubik' rel='stylesheet'>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #D0D0D0; /* Сірий фон */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh; /* Висота вікна браузера */
+        }
 
-    .modal-edit {
-        display: none; /* Початково прихований */
-        position: fixed;
-        z-index: 1;
-        left: 0;
-        top: 0;
-        width: 100%;
-        height: 100%;
-        overflow: auto;
-        background-color: rgba(0,0,0,0.4); /* Напівпрозорий фон */
-    }
+        .window {
+            width: 85%; /* Ширина прямокутника */
+            height: 85%; /* Висота прямокутника */
+            background-color: #ffffff; /* Білий колір */
+            display: flex;
+            /* Вирівнюємо елементи горизонтально */
+            justify-content: space-between;
+            align-items: center;
+        }
 
-    .modal-content {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 30%;
-    height: 50%;
-    border-radius: 20px;
-    background-color: #FFFFFF;
-    padding: 40px;
-    }
+        .left-menu {
+            width: 20%; /* Ширина лівого меню */
+            height: 100%; /* Висота лівого меню */
+            background-color: #403D49; /* Чорний колір */
+        }
+
+        .container {
+            width: calc(80% - 0px); /* Ширина контейнера (з урахуванням відступу 10% з кожного боку) */
+            height: 100%; /* Висота контейнера */
+            background-color: #FFFFFF; /* Бірий колір */
+            overflow: auto;
+        }
+
+        /*ЗДРАВИЙ КОД*/
+        .modal {
+            display: none; /* Початково прихований */
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.4); /* Напівпрозорий фон */
+        }
+
+        .modal-edit {
+            display: none; /* Початково прихований */
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.4); /* Напівпрозорий фон */
+        }
+
+        .modal-content {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 30%;
+            height: 50%;
+            border-radius: 20px;
+            background-color: #FFFFFF;
+            padding: 40px;
+        }
 
 
-    /* Закриття модального вікна */
-    .close {
-        color: #aaa;
-        float: right;
-        font-size: 28px;
-        font-weight: bold;
-    }
+        /* Закриття модального вікна */
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
 
-    .close:hover,
-    .close:focus {
-        color: black;
-        text-decoration: none;
-        cursor: pointer;
-    }
-    .form-group {
-    margin-bottom: 20px;
-}
+            .close:hover,
+            .close:focus {
+                color: black;
+                text-decoration: none;
+                cursor: pointer;
+            }
 
-/* Заокруглення форм */
-.rounded-input {
-    border-radius: 20px;
-    border: 3px solid #AD99DA;
-    padding: 8px;
-    width: calc(100% - 16px);
-}
+        .form-group {
+            margin-bottom: 20px;
+        }
 
-/* Стилізація кнопки */
-button[type="submit"] {
-    border: none;
-    background-color: #AD99DA;
-    color: white;
-    padding: 10px 20px;
-    border-radius: 10px;
-    cursor: pointer;
-    margin-left: auto;
-}
+        /* Заокруглення форм */
+        .rounded-input {
+            border-radius: 20px;
+            border: 3px solid #AD99DA;
+            padding: 8px;
+            width: calc(100% - 16px);
+        }
 
-/* Стилі для розділення на дві колонки */
-.form-row {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 20px;
-}
+        /* Стилізація кнопки */
+        button[type="submit"] {
+            border: none;
+            background-color: #AD99DA;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            margin-left: auto;
+        }
 
-/* Горизонтальний відступ між формами */
-.form-row input {
-    margin-right: 10px;
-}
+        /* Стилі для розділення на дві колонки */
+        .form-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
 
-/* Стилі для кнопки */
-button[type="submit"] {
-    margin-top: -10px;
+            /* Горизонтальний відступ між формами */
+            .form-row input {
+                margin-right: 10px;
+            }
 
-}
-.dialog-text{
-    color: #B6AEE5;
-    font-size: 24px;
-    font-weight: bold;
-}
+        /* Стилі для кнопки */
+        button[type="submit"] {
+            margin-top: -10px;
+        }
 
-.custom-table-container {
-    overflow: hidden; /* Відключаємо прокрутку таблиці */
-    margin: 35px 25px;
-}
+        .dialog-text {
+            color: #B6AEE5;
+            font-size: 24px;
+            font-weight: bold;
+        }
+        /* Стилі для таблиці */
+        /* Стилі для таблиці */
+        .table-history {
+            width: 90%; /* Ширина таблиці */
+            margin: 0 auto; /* Вирівнювання по центру */
+            border-collapse: collapse; /* Злиття меж між комірками */
+            overflow-y: auto; /* Додавання вертикального скролу */
+            max-height: 100px; /* Максимальна висота таблиці */
+        }
 
-.custom-table {
-    table-layout: fixed;
-    width: 100%;
-}
 
-th, td {
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    text-align: left;   
-    overflow: hidden;
-    font-size: 14px;
-}
+            /* Стилі для заголовків таблиці */
+            .table-history th {
+                font-weight: bold; /* Жирний шрифт */
+                border-bottom: 1px solid #ccc; /* Горизонтальна лінія між заголовками і рядками */
+                padding: 10px; /* Відступи від тексту до межі комірки */
+                background-color: white;
+            }
 
-td {
-   padding-left:10px;
-   padding-top: 15px;
-   overflow: hidden;
-}
+            /* Стилі для комірок таблиці */
+            .table-history td {
+                border-bottom: 1px solid #ccc; /* Горизонтальна лінія між рядками */
+                padding: 10px; /* Відступи від тексту до межі комірки */
+                background-color: white;
+            }
 
-th {
-    padding:10px;
-    background-color: #B6AEE5;
-    color: #FFFFFF;
-    text-decoration: none;
-}
+        .dialog-table {
+            overflow-y: auto; /* Додавання вертикального скролу */
+            max-height: 200px;
+            position: relative; /* Потрібно для позиціонування фонової смуги */
+        }
 
-.th-href {
-    color: #FFFFFF;
-    text-decoration: none;
-}
+            /* Стилі для повзунка */
+            .dialog-table::-webkit-scrollbar-thumb {
+                background-color: red; /* Колір повзунка */
+                border-radius: 10px; /* Радіус кутів */
+            }
 
-.th-href:hover {
-    color: #FFFFFF;
-    text-decoration: none;
-    cursor: pointer;
-}
+            /* Стилі для фонової смуги */
+            .dialog-table::-webkit-scrollbar-track {
+                background-color: #8a2be2; /* Колір фонової смуги */
+                border-radius: 10px; /* Радіус кутів */
+            }
+        /*КІНЕЦЬ ЗДРАВОГО КОДУ*/
 
-tr:hover {
-    background-color: #ddd;
-}
+        .custom-table-container {
+            overflow: hidden; /* Відключаємо прокрутку таблиці */
+            margin: 35px 25px;
+        }
 
-.vertical-line {
-    border-right: 2px solid #fff;
-}
+        .custom-table {
+            table-layout: fixed;
+            width: 100%;
+        }
 
-.table-img {
-    width: 35px;
-    height: 35px;
-}
+        th, td {
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            text-align: left;
+            overflow: hidden;
+            font-size: 14px;
+        }
 
-.table-btn-img {
-    cursor: pointer;
-    display: flex;
-    justify-content: center;
-    padding-right: 8px;
-}
+        td {
+            padding-left: 10px;
+            padding-top: 15px;
+            overflow: hidden;
+        }
 
-.actions-col {
-    width: 25%;
-}
+        th {
+            padding: 10px;
+            background-color: #B6AEE5;
+            color: #FFFFFF;
+            text-decoration: none;
+        }
 
-.search-box {
-    display: flex;
-    align-items: center;
-    border: 1px solid #B6AEE5;
-    border-radius: 15px;
-    padding: 3px;
-    width: 180px;
-    margin-bottom: 10px;
-}
+        .th-href {
+            color: #FFFFFF;
+            text-decoration: none;
+        }
 
-.search-img {
-    width: 20px;
-    height: 20px;
-    padding-left: 8px;
-}
+            .th-href:hover {
+                color: #FFFFFF;
+                text-decoration: none;
+                cursor: pointer;
+            }
 
-.input-validation-error{
-    width:100%;
-    border: none;
-    outline: none;
-}
+        tr:hover {
+            background-color: #ddd;
+        }
 
-.custom-pagination-list {
-    list-style-type: none;
-    padding: 0;
-    display: flex;
-    justify-content: center;
-    margin-top: 20px;
-    text-decoration: none;
-}
+        .vertical-line {
+            border-right: 2px solid #fff;
+        }
 
-.custom-pagination-item {
-    margin: 0 5px;
-    padding: 5px 10px;
-    background-color: #EFEFEF;
-    color: #AD99DA;
-    border-radius: 25px;
-    cursor: pointer;
-    text-decoration: none;
-}
+        .table-img {
+            width: 35px;
+            height: 35px;
+        }
 
-.custom-pagination-item a {
-    color: #AD99DA; /* Set the color for pagination numbers */
-    text-decoration: none; /* Remove underline */
-}
+        .table-btn-img {
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            padding-right: 8px;
+        }
 
-.custom-pagination-item.active {
-    background-color: #AD99DA;
-    color: white;
-}
+        .actions-col {
+            width: 25%;
+        }
 
-.custom-pagination-item.prev,
-.custom-pagination-item.next {
-    background-color: white; /* Remove background */
-}
+        .search-box {
+            display: flex;
+            align-items: center;
+            border: 1px solid #B6AEE5;
+            border-radius: 15px;
+            padding: 3px;
+            width: 180px;
+            margin-bottom: 10px;
+        }
 
-.stats-header{
-    margin-left:48px;
-    margin-top:75px;
-    margin-bottom:0;
-    font-family:'Rubik';
-}
+        .search-img {
+            width: 20px;
+            height: 20px;
+            padding-left: 8px;
+        }
 
-.rectangle {
-width: 221px;
-height: 221px;
-margin-right: 25px;
-background: #B6AEE5;
-}
+        .input-validation-error {
+            width: 100%;
+            border: none;
+            outline: none;
+        }
 
-.title-rectangle {
-    font-size:22px;
-    margin-left:12px;
-    margin-top:38px;
-    color:#FFFFFF;
-    font-family:Rubik;
-}
+        .custom-pagination-list {
+            list-style-type: none;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+            text-decoration: none;
+        }
 
-.number-rectangle {
-    font-size:86px;
-    margin-right:14px;
-    margin-top:-23px;
-    color:#FFFFFF;
-    font-family:'Rubik';
-    text-align:right;
-}
+        .custom-pagination-item {
+            margin: 0 5px;
+            padding: 5px 10px;
+            background-color: #EFEFEF;
+            color: #AD99DA;
+            border-radius: 25px;
+            cursor: pointer;
+            text-decoration: none;
+        }
 
-.menu-item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-bottom: 10px;
-}
+            .custom-pagination-item a {
+                color: #AD99DA; /* Set the color for pagination numbers */
+                text-decoration: none; /* Remove underline */
+            }
 
-.menu-item:hover {
-    cursor: pointer;
-}
+            .custom-pagination-item.active {
+                background-color: #AD99DA;
+                color: white;
+            }
 
-.left-menu {
-    width: 20%; /* Ширина лівого меню */
-    height: 100%; /* Висота лівого меню */
-    background-color: #403D49; /* Чорний колір */
-    display: flex;
-    flex-direction: column;
-}
+            .custom-pagination-item.prev,
+            .custom-pagination-item.next {
+                background-color: white; /* Remove background */
+            }
 
-.menu-images {
-    margin-top: 12px;
-    margin-bottom: 14px;
-}
+        .stats-header {
+            margin-left: 48px;
+            margin-top: 75px;
+            margin-bottom: 0;
+            font-family: 'Rubik';
+        }
 
-.menu-img {
-    width: 52px; /* Змініть розмір зображення за потреби */
-    height: 52px; /* Змініть розмір зображення за потреби */
-}
+        .rectangle {
+            width: 221px;
+            height: 221px;
+            margin-right: 25px;
+            background: #B6AEE5;
+        }
 
-.admin-img {
-    width: 88px; /* Змініть розмір зображення за потреби */
-    height: 88px; /* Змініть розмір зображення за потреби */
-}
+        .title-rectangle {
+            font-size: 22px;
+            margin-left: 12px;
+            margin-top: 38px;
+            color: #FFFFFF;
+            font-family: Rubik;
+        }
 
-a {
-    text-decoration: none;
-}
+        .number-rectangle {
+            font-size: 86px;
+            margin-right: 14px;
+            margin-top: -23px;
+            color: #FFFFFF;
+            font-family: 'Rubik';
+            text-align: right;
+        }
 
-.menu-label {
-    margin-top: 3px;
-    font-family: Rubik;
-    font-size: 14px;
-    color: #fff;
-}
+        .menu-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 10px;
+        }
 
-.admin-label {
-    margin-top: 3px;
-    font-family: Rubik;
-    font-size: 20px;
-    color: #fff;
-}
+            .menu-item:hover {
+                cursor: pointer;
+            }
 
-.table-date {
-    font-weight: bold;
-}
+        .left-menu {
+            width: 20%; /* Ширина лівого меню */
+            height: 100%; /* Висота лівого меню */
+            background-color: #403D49; /* Чорний колір */
+            display: flex;
+            flex-direction: column;
+        }
 
-.search-box input {
-    flex-grow: 1;
-    border: none; /* Removes default input border */
-    outline: none; /* Removes focus outline */
-    font-family: 'Rubik', sans-serif;
-    font-size: 16px; /* Adjust font size as needed */
-    color: #666666; /* Adjust text color as needed */
-    background-color: transparent; /* Ensures no background color */
-}
+        .menu-images {
+            margin-top: 12px;
+            margin-bottom: 14px;
+        }
 
-</style>
+        .menu-img {
+            width: 52px; /* Змініть розмір зображення за потреби */
+            height: 52px; /* Змініть розмір зображення за потреби */
+        }
+
+        .admin-img {
+            width: 88px; /* Змініть розмір зображення за потреби */
+            height: 88px; /* Змініть розмір зображення за потреби */
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        .menu-label {
+            margin-top: 3px;
+            font-family: Rubik;
+            font-size: 14px;
+            color: #fff;
+        }
+
+        .admin-label {
+            margin-top: 3px;
+            font-family: Rubik;
+            font-size: 20px;
+            color: #fff;
+        }
+
+        .table-date {
+            font-weight: bold;
+        }
+
+        .search-box input {
+            flex-grow: 1;
+            border: none; /* Removes default input border */
+            outline: none; /* Removes focus outline */
+            font-family: 'Rubik', sans-serif;
+            font-size: 16px; /* Adjust font size as needed */
+            color: #666666; /* Adjust text color as needed */
+            background-color: transparent; /* Ensures no background color */
+        }
+
+    </style>
 </head>
 <body>
     <div class="window">
-<div class="left-menu">
+        @model DoctorViewModel
+        <div class="left-menu">
             <div class="menu-images">
-            <div class="menu-item">
-                <img src="~/images/admin.svg" alt="Admin" class="admin-img">
-                <span class="admin-label">Адмін</span>
-            </div>
-            <a href="/api/doctors">
                 <div class="menu-item">
-                    <img src="~/images/doctors.svg" alt="Doctors" class="menu-img">
-                     <span class="menu-label">Лікарі</span>
+                    <img src="~/images/admin.svg" alt="Admin" class="admin-img">
+                    <span class="admin-label">Адмін</span>
                 </div>
-            </a>
-            <a href="/api/patients" class="menu-item">
-                <img src="~/images/patients.svg" alt="Patients" class="menu-img">
-                <span class="menu-label">Пацієнти</span>
-            </a>
-            <a href="/api/appointments" class="menu-item">
-                <img src="~/images/records.svg" alt="Records" class="menu-img">
-                <span class="menu-label">Записи</span>
-            </a>
-            <a href="/stats" class="menu-item">
-                <img src="~/images/stats.svg" alt="Stats" class="menu-img">
-                <span class="menu-label">Статистика</span>
-            </a>
+                <a href="/api/doctors">
+                    <div class="menu-item">
+                        <img src="~/images/doctors.svg" alt="Doctors" class="menu-img">
+                        <span class="menu-label">Лікарі</span>
+                    </div>
+                </a>
+                <a href="/api/patients" class="menu-item">
+                    <img src="~/images/patients.svg" alt="Patients" class="menu-img">
+                    <span class="menu-label">Пацієнти</span>
+                </a>
+                <a href="/api/appointments" class="menu-item">
+                    <img src="~/images/records.svg" alt="Records" class="menu-img">
+                    <span class="menu-label">Записи</span>
+                </a>
+                <a href="/stats" class="menu-item">
+                    <img src="~/images/stats.svg" alt="Stats" class="menu-img">
+                    <span class="menu-label">Статистика</span>
+                </a>
             </div>
         </div>
         <div class="container">
             <div class="custom-table-container">
                 @using (Html.BeginForm())
                 {
-                                <div  class="search-box">
-                                    <img src="~/images/search.svg" alt="Stats" class="search-img">
-                        @Html.TextBox("searchString")  
-                                </div>
+                    <div class="search-box">
+                        <img src="~/images/search.svg" alt="Stats" class="search-img">
+                        @Html.TextBox("searchString")
+                    </div>
                 }
 
                 <table class="custom-table">
@@ -413,54 +464,393 @@ a {
                             <th colspan="3" class="actions-col">Дії</th>
                         </tr>
                     </thead>
+                    <button onclick="openModalAddAppointment()" style="border: none; background-color: #AD99DA; color: white; padding: 10px 20px; border-radius: 10px; cursor: pointer; position: absolute; top: 75px; right: 140px;">Створити запис</button>
 
                     <tbody>
-                        @foreach (var appointment in Model)
+                        @foreach (var appointment in Model.IAppointment)
                         {
-                                        <tr>
-                                            <td>
-                                                @Html.DisplayFor(modelItem => appointment.PatientRefNavigation.LastName) @Html.DisplayFor(modelItem => appointment.PatientRefNavigation.FirstName)<br />
-                                                @Html.DisplayFor(modelItem => appointment.PatientRefNavigation.Patronymic)
-                                            </td>
-                                            <td>
-                                                @Html.DisplayFor(modelItem => appointment.DoctorRefNavigation.LastName) @Html.DisplayFor(modelItem => appointment.DoctorRefNavigation.FirstName)<br />
-                                                @Html.DisplayFor(modelItem => appointment.DoctorRefNavigation.Patronymic)
-                                            </td>
-                                            <td class="table-date">@appointment.DateAndTime.ToString("dd.MM.yyyy")<br />@appointment.DateAndTime.ToString("HH:mm") - @appointment.DateAndTime.AddMinutes(30).ToString("HH:mm")</td>
-                                            <td>@Html.DisplayFor(modelItem => appointment.Message)</td>
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => appointment.PatientRefNavigation.LastName) @Html.DisplayFor(modelItem => appointment.PatientRefNavigation.FirstName)<br />
+                                    @Html.DisplayFor(modelItem => appointment.PatientRefNavigation.Patronymic)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => appointment.DoctorRefNavigation.LastName) @Html.DisplayFor(modelItem => appointment.DoctorRefNavigation.FirstName)<br />
+                                    @Html.DisplayFor(modelItem => appointment.DoctorRefNavigation.Patronymic)
+                                </td>
+                                <td class="table-date">@appointment.DateAndTime.ToString("dd.MM.yyyy")<br />@appointment.DateAndTime.ToString("HH:mm") - @appointment.DateAndTime.AddMinutes(30).ToString("HH:mm")</td>
+                                <td>@Html.DisplayFor(modelItem => appointment.Message)</td>
 
-                                            <td>
-                                                       <a class="table-btn-img" asp-controller="Users" asp-action="Edit" asp-route-id="@appointment.AppointmentId">
-                                                        <img src="~/images/history.svg" alt="Stats" class="table-img">
-                                                   </a>
-                                            </td>
-                                            <td>
-                                                        <a class="table-btn-img" asp-controller="Users" asp-action="Delete" asp-route-id="@appointment.AppointmentId">
-                                                        <img src="~/images/edit.svg" alt="Stats" class="table-img">
-                                                </a>
-                                            </td>
-                                            <td>
-                                                        <a class="table-btn-img" asp-controller="Users" asp-action="Delete" asp-route-id="@appointment.AppointmentId">
-                                                        <img src="~/images/delete.svg" alt="Stats" class="table-img">
-                                                </a>
-                                            </td>
-                                        </tr>
+                                <td>
+                                    <button class="table-btn-img" asp-controller="Users" asp-action="Edit" asp-route-id="@appointment.AppointmentId" onclick="openModalEditAppointment(@appointment.AppointmentId)">
+                                        <img src="~/images/history.svg" alt="Stats" class="table-img">
+                                    </button>
+                                </td>
+                                <td>
+                                    <a class="table-btn-img" asp-controller="Users" asp-action="Delete" asp-route-id="@appointment.AppointmentId">
+                                        <img src="~/images/edit.svg" alt="Stats" class="table-img">
+                                    </a>
+                                </td>
+                                <td>
+                                    <a class="table-btn-img" asp-controller="Users" asp-action="Delete" asp-route-id="@appointment.AppointmentId">
+                                        <img src="~/images/delete.svg" alt="Stats" class="table-img">
+                                    </a>
+                                </td>
+                            </tr>
                         }
-                        </tbody>
-                    </table>
+                    </tbody>
+                </table>
                 <div class="pagination-container">
-                    @Html.PagedListPager(Model, page => Url.Action("Appointments", new { page, sortOrder = ViewBag.LastNameSortParm }), 
-                        new PagedListRenderOptions { 
-                            LiElementClasses = new string[] { "custom-pagination-item" }, 
-                            UlElementClasses = new string[] { "custom-pagination-list" },
-                            Display = PagedListDisplayMode.IfNeeded,
-                            LinkToPreviousPageFormat = "<",
-                            LinkToNextPageFormat = ">"
-                        })
+                    @Html.PagedListPager(Model.IAppointment, page => Url.Action("Appointments", new { page, sortOrder = ViewBag.LastNameSortParm }),
+                    new PagedListRenderOptions {
+                    LiElementClasses = new string[] { "custom-pagination-item" },
+                    UlElementClasses = new string[] { "custom-pagination-list" },
+                    Display = PagedListDisplayMode.IfNeeded,
+                    LinkToPreviousPageFormat = "<",
+                    LinkToNextPageFormat = ">"
+                    })
                 </div>
             </div>
         </div>
     </div>
+
+
+
+    <!--ADD APPOINTMENT-->
+    <div id="myModalAddAppointment" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModalAddAppointmentAdmin()">&times;</span>
+            <h2 class="dialog-text">Створити запис</h2>
+            <form action="/add-new-appointment" method="post">
+                <input type="hidden" id="selectedDoctor" name="doctorRef" value="">
+                <input type="hidden" id="selectedPatient" name="patientRef" value="">
+                <input type="hidden" id="selectedDate" name="date" value="">
+                <input type="hidden" id="selectedTime" name="time" value="">
+                <label for="doctors">Оберіть лікаря:</label>
+                <select id="doctors" name="doctors" class="rounded-input">
+                </select>
+
+                <label for="patients">Оберіть пацієнта:</label>
+                <select id="patients" name="patients" class="rounded-input">
+                </select>
+                <div class="form-row">
+                    <div>
+                        <label for="data">Оберіть дату:</label>
+                        <select id="data" name="data" class="rounded-input">
+                        </select>
+                    </div>
+                    <div>
+                        <label for="time">Оберіть час:</label>
+                        <select id="time" name="time" class="rounded-input">
+                        </select>
+                    </div>
+
+
+                </div>
+                <button class="add-doctor" type="submit">Зберегти</button>
+            </form>
+
+        </div>
+    </div>
+
+
+    <!--EDIT APPOINTMENT-->
+    <div id="myModalEditAppointment" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModalEditAppointmentAdmin()">&times;</span>
+            <h2 class="dialog-text">Створити запис</h2>
+            <form action="/save-edit-appointment" method="post">
+                <input type="hidden" id="selectedDoctor2" name="doctorRef" value="">
+                <input type="hidden" id="selectedPatient2" name="patientRef" value="">
+                <input type="hidden" id="selectedDate2" name="date" value="">
+                <input type="hidden" id="selectedTime2" name="time" value="">
+                <label for="doctors">Оберіть лікаря:</label>
+                <select id="doctors2" name="doctors" class="rounded-input">
+                </select>
+
+                <label for="patients">Оберіть пацієнта:</label>
+                <select id="patients2" name="patients" class="rounded-input">
+                </select>
+                <div class="form-row">
+                    <div>
+                        <label for="data">Оберіть дату:</label>
+                        <select id="data2" name="data" class="rounded-input">
+                        </select>
+                    </div>
+                    <div>
+                        <label for="time">Оберіть час:</label>
+                        <select id="time2" name="time" class="rounded-input">
+                        </select>
+                    </div>
+
+
+                </div>
+                <button class="add-doctor" type="submit">Зберегти</button>
+            </form>
+
+        </div>
+    </div>
+
+
 </body>
+
+<script>
+    const modalAddAppointment = document.getElementById('myModalAddAppointment');
+    const modalEditAppointment = document.getElementById('myModalEditAppointment');
+
+    const doctorsSelect = document.getElementById('doctors');
+    const patientsSelect = document.getElementById('patients');
+    const dateSelect = document.getElementById('data');
+    const timeSelect = document.getElementById('time');
+
+    const doctorsSelect2 = document.getElementById('doctors2');
+    const patientsSelect2 = document.getElementById('patients2');
+    const dateSelect2 = document.getElementById('data2');
+    const timeSelect2 = document.getElementById('time2');
+
+
+    var selectedDoctor = doctorsSelect.value;
+    var selectedPatient = patientsSelect.value;
+    var selectedDate = dateSelect.value;
+    var selectedTime = timeSelect.value;
+
+    var selectedDoctor2 = doctorsSelect2.value;
+    var selectedPatient2 = patientsSelect2.value;
+    var selectedDate2 = dateSelect2.value;
+    var selectedTime2 = timeSelect2.value;
+
+
+    doctorsSelect.addEventListener('change', updateHiddenFields);
+    patientsSelect.addEventListener('change', updateHiddenFields);
+    dateSelect.addEventListener('change', updateHiddenFields);
+    timeSelect.addEventListener('change', updateHiddenFields);
+    doctorsSelect.addEventListener('change', handleFormChange);
+    dateSelect.addEventListener('change', handleFormChange);
+
+    doctorsSelect2.addEventListener('change', updateHiddenFields2);
+    patientsSelect2.addEventListener('change', updateHiddenFields2);
+    dateSelect2.addEventListener('change', updateHiddenFields2);
+    timeSelect2.addEventListener('change', updateHiddenFields2);
+    doctorsSelect2.addEventListener('change', handleFormChange2);
+    dateSelect2.addEventListener('change', handleFormChange2);
+
+    function handleFormChange() {
+        selectedDoctor = doctorsSelect.value; // Оновлюємо значення вибраного лікаря при його зміні
+        selectedDate = dateSelect.value; // Оновлюємо значення вибраної дати при її зміні
+        fetchFreeHours(selectedDoctor, selectedDate); // Викликаємо функцію для завантаження вільних годин
+    }
+
+    function updateHiddenFields() {
+        selectedDoctor = doctorsSelect.value;
+        selectedPatient = patientsSelect.value;
+        selectedDate = dateSelect.value;
+        selectedTime = timeSelect.value;
+
+        document.getElementById('selectedDoctor').value = selectedDoctor;
+        document.getElementById('selectedPatient').value = selectedPatient;
+        document.getElementById('selectedDate').value = selectedDate;
+        document.getElementById('selectedTime').value = selectedTime;
+
+      
+    }
+
+    function handleFormChange2() {
+        selectedDoctor2 = doctorsSelect2.value; // Оновлюємо значення вибраного лікаря при його зміні
+        selectedDate2 = dateSelect2.value; // Оновлюємо значення вибраної дати при її зміні
+        fetchFreeHours2(selectedDoctor2, selectedDate2); // Викликаємо функцію для завантаження вільних годин
+    }
+
+    function updateHiddenFields2() {
+        selectedDoctor2 = doctorsSelect2.value;
+        selectedPatient2 = patientsSelect2.value;
+        selectedDate2 = dateSelect2.value;
+        selectedTime2 = timeSelect2.value;
+
+        document.getElementById('selectedDoctor2').value = selectedDoctor2;
+        document.getElementById('selectedPatient2').value = selectedPatient2;
+        document.getElementById('selectedDate2').value = selectedDate2;
+        document.getElementById('selectedTime2').value = selectedTime2;
+
+        console.log(document.getElementById('selectedDoctor2').value);
+        console.log(document.getElementById('selectedPatient2').value);
+        console.log(document.getElementById('selectedDate2').value);
+        console.log(document.getElementById('selectedTime2').value);
+    }
+
+   
+    function openModalEditAppointment(id) {
+        modalEditAppointment.style.display = "block";
+
+        // Очищаємо вміст випадаючих списків перед заповненням новими значеннями
+        doctorsSelect2.innerHTML = '';
+        patientsSelect2.innerHTML = '';
+        dateSelect2.innerHTML = '';
+        timeSelect2.innerHTML = '';
+
+        var idDoctor;
+        var idPatient;
+        var idAppointment;
+
+        fetch(`/edit-appointment/${id}`)
+            .then(response => response.json())
+            .then(appointment => {
+                idDoctor = appointment.doctorRef;
+                idPatient = appointment.patientRef;
+                idAppointment = appointment.appointmentId;
+                console.log("idDoc" + idDoctor);
+            })
+            .catch(error => console.error('Error:', error));
+        fetch(`/get-users`)
+            .then(response => response.json())
+            .then(doctorViewModel => {
+                if (doctorViewModel && doctorViewModel.doctors) {
+                    const doctors = doctorViewModel.doctors;
+                    doctors.forEach(doctor => {
+                        const option = document.createElement('option');
+                        option.text = doctor.firstName + " " + doctor.lastName + "  " + doctor.type;
+                        option.value = doctor.userId;
+                        console.log(doctor.userId);
+                        doctorsSelect2.add(option);
+                        if (idDoctor == doctor.userId) {
+                            option.selected = true;
+                        }
+                    });
+                }
+                if (doctorViewModel && doctorViewModel.patients) {
+                    const patients = doctorViewModel.patients;
+                    patients.forEach(patient => {
+                        const option = document.createElement('option');
+                        option.text = patient.firstName + " " + patient.lastName;
+                        option.value = patient.userId;
+                        patientsSelect2.add(option);
+                        if (idPatient == patient.userId) {
+                            option.selected = true;
+                        }
+                    });
+                }
+            })
+            .catch(error => console.error('Error:', error));
+
+        fetch(`/get-dates`)
+            .then(response => response.json())
+            .then(dates => {
+                dates.forEach(date => {
+                    const option = document.createElement('option');
+                    option.text = date.substring(0, 10);
+                    option.value = date;
+                    dateSelect2.add(option);
+                });
+            })
+            .catch(error => console.error('Error:', error));
+    }
+
+
+    function openModalAddAppointment() {
+        modalAddAppointment.style.display = "block";
+
+        // Очищаємо вміст випадаючих списків перед заповненням новими значеннями
+        doctorsSelect.innerHTML = '';
+        patientsSelect.innerHTML = '';
+        dateSelect.innerHTML = '';
+        timeSelect.innerHTML = '';
+
+        fetch(`/get-users`)
+            .then(response => response.json())
+            .then(doctorViewModel => {
+                if (doctorViewModel && doctorViewModel.doctors) {
+                    const doctors = doctorViewModel.doctors;
+                    doctors.forEach(doctor => {
+                        const option = document.createElement('option');
+                        option.text = doctor.firstName + " " + doctor.lastName + "  " + doctor.type;
+                        option.value = doctor.userId;
+                        doctorsSelect.add(option);
+                    });
+                }
+                if (doctorViewModel && doctorViewModel.patients) {
+                    const patients = doctorViewModel.patients;
+                    patients.forEach(patient => {
+                        const option = document.createElement('option');
+                        option.text = patient.firstName + " " + patient.lastName;
+                        option.value = patient.userId;
+                        patientsSelect.add(option);
+                    });
+                }
+            })
+            .catch(error => console.error('Error:', error));
+
+        fetch(`/get-dates`)
+            .then(response => response.json())
+            .then(dates => {
+                dates.forEach(date => {
+                    const option = document.createElement('option');
+                    option.text = date.substring(0, 10);
+                    option.value = date;
+                    dateSelect.add(option);
+                });
+            })
+            .catch(error => console.error('Error:', error));
+    }
+
+    function fetchFreeHours(doctor, date) {
+
+    fetch(`/get-free-hours?doctor=${doctor}&date=${date}`)
+        .then(response => response.json())
+        .then(freeHours => {
+            // Очищаємо список варіантів
+            timeSelect.innerHTML = '';
+            // Додаємо нові варіанти з отриманих вільних годин
+            freeHours.forEach(hour => {
+                const option = document.createElement('option');
+                option.text = hour.substring(11, 16);
+                option.value = hour;
+                timeSelect.add(option);
+            });
+        })
+        .catch(error => console.error('Error:', error));
+}
+    function fetchFreeHours2(doctor, date) {
+        timeSelect2.innerHTML = '';
+        fetch(`/get-free-hours?doctor=${doctor}&date=${date}`)
+            .then(response => response.json())
+            .then(freeHours => {
+                // Очищаємо список варіантів
+                timeSelect.innerHTML = '';
+                // Додаємо нові варіанти з отриманих вільних годин
+                freeHours.forEach(hour => {
+                    const option = document.createElement('option');
+                    option.text = hour.substring(11, 16);
+                    option.value = hour;
+                    timeSelect2.add(option);
+                });
+            })
+            .catch(error => console.error('Error:', error));
+    }
+
+
+    function saveAppointment() {
+        // Отримуємо обрані значення з випадаючих списків
+        const selectedDoctor = doctorsSelect.value;
+        const selectedPatient = patientsSelect.value;
+        const selectedDate = dateSelect.value;
+        const selectedTime = timeSelect.value;
+
+        // Заповнюємо значеннями відповідних прихованих полів
+        document.getElementById('selectedDoctor').value = selectedDoctor;
+        document.getElementById('selectedPatient').value = selectedPatient;
+        document.getElementById('selectedTime').value = selectedDate + ' ' + selectedTime;
+
+        // Відправляємо форму на сервер
+        document.getElementById('appointmentForm').submit();
+    }
+
+    function closeModalAddAppointmentAdmin(){
+        modalAddAppointment.style.display = "none";
+    }
+
+    function closeModalEditAppointmentAdmin() {
+        modalEditAppointment.style.display = "none";
+    }
+
+</script>
 
 </html>

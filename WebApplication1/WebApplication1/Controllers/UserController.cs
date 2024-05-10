@@ -1,4 +1,5 @@
 ﻿using EF;
+using EF.DTO.User;
 using EF.service;
 using EF.service.@interface;
 using Microsoft.AspNetCore.Mvc;
@@ -6,6 +7,7 @@ using NLog;
 using WebApplication1.Data;
 using WebApplication1.Data.DTO.User;
 using X.PagedList;
+using WebApplication1.Data.models;
 
 namespace WebApplication1.Controllers
 {
@@ -194,7 +196,7 @@ namespace WebApplication1.Controllers
 
             int pageSize = 5;
             int pageNumber = page ?? 1;
-            return this.View(doctors.ToPagedList(pageNumber, pageSize));
+            return this.View(new DoctorViewModel(null, null, doctors.ToPagedList(pageNumber, pageSize)));
         }
 
         [HttpPost]
@@ -252,7 +254,7 @@ namespace WebApplication1.Controllers
 
             int pageSize = 5;
             int pageNumber = page ?? 1;
-            return this.View(patients.ToPagedList(pageNumber, pageSize));
+            return this.View(new DoctorViewModel(null,null,patients.ToPagedList(pageNumber, pageSize)));
         }
 
         [HttpPost]
@@ -319,7 +321,7 @@ namespace WebApplication1.Controllers
 
             this.ViewBag.NearestAppointment = nearestAppointment;
 
-            return this.View(appointments.ToPagedList(pageNumber, pageSize));
+            return this.View(new DoctorViewModel(null, null, appointments.ToPagedList(pageNumber, pageSize)));
         }
 
         [HttpPost]
@@ -386,7 +388,8 @@ namespace WebApplication1.Controllers
 
             this.ViewBag.NearestAppointment = nearestAppointment;
 
-            return this.View(appointments.ToPagedList(pageNumber, pageSize));
+            return this.View(new DoctorViewModel(null, null, appointments.ToPagedList(pageNumber, pageSize)));
         }
+
     }
 }

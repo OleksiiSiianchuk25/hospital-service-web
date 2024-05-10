@@ -1,4 +1,4 @@
-﻿@model X.PagedList.IPagedList<EF.User>
+﻿@using WebApplication1.Data.models;
 @using X.PagedList.Mvc.Core;
 @{
     ViewData["Title"] = "User Table Page";
@@ -41,102 +41,148 @@
         background-color: #FFFFFF; /* Бірий колір */
         overflow: auto; 
     }
-    .modal {
-        display: none; /* Початково прихований */
-        position: fixed;
-        z-index: 1;
-        left: 0;
-        top: 0;
-        width: 100%;
-        height: 100%;
-        overflow: auto;
-        background-color: rgba(0,0,0,0.4); /* Напівпрозорий фон */
-    }
+        /*ЗДРАВИЙ КОД*/
+        .modal {
+            display: none; /* Початково прихований */
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.4); /* Напівпрозорий фон */
+        }
 
-    .modal-edit {
-        display: none; /* Початково прихований */
-        position: fixed;
-        z-index: 1;
-        left: 0;
-        top: 0;
-        width: 100%;
-        height: 100%;
-        overflow: auto;
-        background-color: rgba(0,0,0,0.4); /* Напівпрозорий фон */
-    }
+        .modal-edit {
+            display: none; /* Початково прихований */
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.4); /* Напівпрозорий фон */
+        }
 
-    .modal-content {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 30%;
-    height: 50%;
-    border-radius: 20px;
-    background-color: #FFFFFF;
-    padding: 40px;
-    }
+        .modal-content {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 30%;
+            height: 50%;
+            border-radius: 20px;
+            background-color: #FFFFFF;
+            padding: 40px;
+        }
 
 
-    /* Закриття модального вікна */
-    .close {
-        color: #aaa;
-        float: right;
-        font-size: 28px;
-        font-weight: bold;
-    }
+        /* Закриття модального вікна */
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
 
-    .close:hover,
-    .close:focus {
-        color: black;
-        text-decoration: none;
-        cursor: pointer;
-    }
-    .form-group {
-    margin-bottom: 20px;
-}
+            .close:hover,
+            .close:focus {
+                color: black;
+                text-decoration: none;
+                cursor: pointer;
+            }
 
-/* Заокруглення форм */
-.rounded-input {
-    border-radius: 20px;
-    border: 3px solid #AD99DA;
-    padding: 8px;
-    width: calc(100% - 16px);
-}
+        .form-group {
+            margin-bottom: 20px;
+        }
 
-/* Стилізація кнопки */
-button[type="submit"] {
-    border: none;
-    background-color: #AD99DA;
-    color: white;
-    padding: 10px 20px;
-    border-radius: 10px;
-    cursor: pointer;
-    margin-left: auto;
-}
+        /* Заокруглення форм */
+        .rounded-input {
+            border-radius: 20px;
+            border: 3px solid #AD99DA;
+            padding: 8px;
+            width: calc(100% - 16px);
+        }
 
-/* Стилі для розділення на дві колонки */
-.form-row {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 20px;
-}
+        /* Стилізація кнопки */
+        button[type="submit"] {
+            border: none;
+            background-color: #AD99DA;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            margin-left: auto;
+        }
 
-/* Горизонтальний відступ між формами */
-.form-row input {
-    margin-right: 10px;
-}
+        /* Стилі для розділення на дві колонки */
+        .form-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
 
-/* Стилі для кнопки */
-button[type="submit"] {
-    margin-top: -10px;
+            /* Горизонтальний відступ між формами */
+            .form-row input {
+                margin-right: 10px;
+            }
 
-}
-.dialog-text{
-    color: #B6AEE5;
-    font-size: 24px;
-    font-weight: bold;
-}
+        /* Стилі для кнопки */
+        button[type="submit"] {
+            margin-top: -10px;
+        }
+
+        .dialog-text {
+            color: #B6AEE5;
+            font-size: 24px;
+            font-weight: bold;
+        }
+        /* Стилі для таблиці */
+        /* Стилі для таблиці */
+        .table-history {
+            width: 90%; /* Ширина таблиці */
+            margin: 0 auto; /* Вирівнювання по центру */
+            border-collapse: collapse; /* Злиття меж між комірками */
+            overflow-y: auto; /* Додавання вертикального скролу */
+            max-height: 100px; /* Максимальна висота таблиці */
+        }
+
+
+            /* Стилі для заголовків таблиці */
+            .table-history th {
+                font-weight: bold; /* Жирний шрифт */
+                border-bottom: 1px solid #ccc; /* Горизонтальна лінія між заголовками і рядками */
+                padding: 10px; /* Відступи від тексту до межі комірки */
+                background-color: white;
+            }
+
+            /* Стилі для комірок таблиці */
+            .table-history td {
+                border-bottom: 1px solid #ccc; /* Горизонтальна лінія між рядками */
+                padding: 10px; /* Відступи від тексту до межі комірки */
+                background-color: white;
+            }
+
+        .dialog-table {
+            overflow-y: auto; /* Додавання вертикального скролу */
+            max-height: 200px;
+            position: relative; /* Потрібно для позиціонування фонової смуги */
+        }
+
+            /* Стилі для повзунка */
+            .dialog-table::-webkit-scrollbar-thumb {
+                background-color: red; /* Колір повзунка */
+                border-radius: 10px; /* Радіус кутів */
+            }
+
+            /* Стилі для фонової смуги */
+            .dialog-table::-webkit-scrollbar-track {
+                background-color: #8a2be2; /* Колір фонової смуги */
+                border-radius: 10px; /* Радіус кутів */
+            }
+        /*КІНЕЦЬ ЗДРАВОГО КОДУ*/
 
 .custom-table-container {
     overflow: hidden; /* Відключаємо прокрутку таблиці */
@@ -357,6 +403,7 @@ a {
 </head>
 <body>
     <div class="window">
+        @model DoctorViewModel
 <div class="left-menu">
             <div class="menu-images">
             <div class="menu-item">
@@ -392,7 +439,6 @@ a {
                         @Html.TextBox("searchString")  
                             </div>
                 }
-
                 <table class="custom-table">
                     <thead>
                         <tr>
@@ -408,9 +454,10 @@ a {
                             <th colspan="3" class="actions-col">Actions</th>
                         </tr>
                     </thead>
+                    <button onclick="openModalAddDoctor()" style="border: none; background-color: #AD99DA; color: white; padding: 10px 20px; border-radius: 10px; cursor: pointer; position: absolute;top: 75px; right: 140px;">Додати пацієнта</button>
 
                     <tbody>
-                        @foreach (var patient in Model)
+                        @foreach (var patient in Model.IUsers)
                         {
                                     <tr>
                                         <td>
@@ -420,27 +467,27 @@ a {
                                         <td>@Html.DisplayFor(modelItem => patient.Phone)</td>
                                         <td>@Html.DisplayFor(modelItem => patient.Email)</td>
                                         <td>
-                                               <a class="table-btn-img" asp-controller="Users" asp-action="Edit" asp-route-id="@patient.UserId">
+                                    <button class="table-btn-img" asp-controller="Users" asp-action="Edit" asp-route-id="@patient.UserId" onclick="openModalEditDoctor(@patient.UserId)">
                                                     <img src="~/images/history.svg" alt="Stats" class="table-img">
-                                               </a>
+                                               </button>
                                         </td>
                                         <td>
-                                            <a class="table-btn-img" asp-controller="Users" asp-action="Delete" asp-route-id="@patient.UserId">
+                                    <button class="table-btn-img" asp-controller="Users" asp-action="Delete" asp-route-id="@patient.UserId" onclick="openModalHistoryDoctor(@patient.UserId)">
                                                     <img src="~/images/edit.svg" alt="Stats" class="table-img">
-                                            </a>
+                                            </button>
                                         </td>
                                         <td>
-                                            <a class="table-btn-img" asp-controller="Users" asp-action="Delete" asp-route-id="@patient.UserId">
+                                            <button class="table-btn-img" asp-controller="Users" asp-action="Delete" asp-route-id="@patient.UserId">
                                                     <img src="~/images/delete.svg" alt="Stats" class="table-img">
-                                            </a>
+                                            </button>
                                         </td>
                                     </tr>
                         }
                         </tbody>
                     </table>
                 <div class="pagination-container">
-                    @Html.PagedListPager(Model, page => Url.Action("Patients", new { page, sortOrder = ViewBag.LastNameSortParm }), 
-                        new PagedListRenderOptions { 
+                    @Html.PagedListPager(Model.IUsers, page => Url.Action("Patients", new { page, sortOrder = ViewBag.LastNameSortParm }),
+                    new PagedListRenderOptions { 
                             LiElementClasses = new string[] { "custom-pagination-item" }, 
                             UlElementClasses = new string[] { "custom-pagination-list" },
                             Display = PagedListDisplayMode.IfNeeded,
@@ -450,7 +497,159 @@ a {
                 </div>
             </div>
         </div>
+
+         <!-- Модальне вікно для додавання лікаря -->
+        <div id="myModalAddDoctor" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeModalAddDoctor()">&times;</span>
+                <h2 class="dialog-text">Додавання нового пацієнта</h2>
+                <form action="/add-new-patient" method="post">
+                    <div class="form-row">
+                        <input type="text" id="firstName" name="firstName" class="rounded-input" placeholder="Ім'я" required>
+                        <input type="text" id="lastName" name="lastName" class="rounded-input" placeholder="Прізвище" required>
+                    </div>
+                    <div class="form-row">
+                        <input type="tel" id="phone" name="phone" class="rounded-input" placeholder="Телефон" required>
+                        <input type="email" id="email" name="email" class="rounded-input" placeholder="Пошта" required>
+                    </div>
+                    <div class="form-row">
+                        <input type="password" id="password" name="password" class="rounded-input" placeholder="Пароль" required>
+                    </div>
+                    <button class="add-doctor" type="submit">Надіслати</button>
+                </form>
+            </div>
+        </div>
+
+
+        <!-- Модальне вікно для редагування пацієнта -->
+        <div id="myModalEditDoctor" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeModalEditDoctor()">&times;</span>
+                <h2 class="dialog-text">Редагування пацієнта</h2>
+                <form action="/save-edit-patient" method="post">
+                    <div class="form-row">
+                        <input type="hidden" id="id" name="userId" class="rounded-input" placeholder="Ім'я" required>
+                        <input type="text" id="firstName2" name="firstName" class="rounded-input" placeholder="Ім'я" required>
+                        <input type="text" id="lastName2" name="lastName" class="rounded-input" placeholder="Прізвище" required>
+                    </div>
+                    <div class="form-row">
+                        <input type="tel" id="phone2" name="phone" class="rounded-input" placeholder="Телефон" required>
+                        <input type="email" id="email2" name="email" class="rounded-input" placeholder="Пошта" required>
+                    </div>
+                    <button class="add-doctor" type="submit">Зберегти</button>
+                </form>
+            </div>
+        </div>
+
+
+
+        <!-- Модальне вікно для історії пацієнта -->
+        <div id="myModalHistoryDoctor" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeModalHistoryDoctor()">&times;</span>
+                <h2 class="dialog-text">Історія записів</h2>
+                <div class="dialog-table">
+                    <table id="historyTable" class="table-history">
+                        <thead>
+                            <tr>
+                                <th>Ім'я</th>
+                                <th>Дата</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
     </div>
+    <script>
+
+        var modalAddDoctor = document.getElementById("myModalAddDoctor");
+        var modalEditDoctor = document.getElementById("myModalEditDoctor");
+        var modalHistoryDoctor = document.getElementById("myModalHistoryDoctor");
+
+        function openModalAddDoctor() {
+            modalAddDoctor.style.display = "block";
+            modalEditDoctor.style.display = "none"; // Закриваємо модальне вікно для редагування
+            modalHistoryDoctor.style.display = "none"; // Закриваємо модальне вікно для редагування
+        }
+
+        function closeModalAddDoctor() {
+            modalAddDoctor.style.display = "none";
+        }
+
+        function openModalEditDoctor(id) {
+            modalEditDoctor.style.display = "block";
+            modalAddDoctor.style.display = "none"; // Закриваємо модальне вікно для додавання
+            modalHistoryDoctor.style.display = "none";
+            // Закриваємо модальне вікно для додавання
+            fetch(`/edit-patient/${id}`)
+                .then(response => response.json())
+                .then(userDTO => {
+                    // Вставка отриманих даних у поля форми
+                    document.getElementById("id").value = userDTO.userId;
+                    document.getElementById("firstName2").value = userDTO.firstName;
+                    document.getElementById("lastName2").value = userDTO.lastName;
+                    document.getElementById("phone2").value = userDTO.phone;
+                    document.getElementById("email2").value = userDTO.email;
+                })
+                .catch(error => {
+                    console.error('Error fetching data:', error);
+                });
+
+
+        }
+
+        function closeModalEditDoctor() {
+            modalEditDoctor.style.display = "none";
+        }
+
+        function openModalHistoryDoctor(id) {
+            modalEditDoctor.style.display = "none";
+            modalAddDoctor.style.display = "none"; // Закриваємо модальне вікно для додавання
+            modalHistoryDoctor.style.display = "block";
+            fetch(`/history-patient/${id}`)
+                .then(response => response.json())
+                .then(doctorViewModel => {
+                    if (doctorViewModel && doctorViewModel.appointments) {
+                        const appointments = doctorViewModel.appointments;
+                        const tableBody = document.getElementById('historyTable').getElementsByTagName('tbody')[0];
+
+                        // Clear existing rows
+                        tableBody.innerHTML = '';
+
+                        // Fill table with data
+                        appointments.forEach(appointment => {
+                            const row = tableBody.insertRow();
+                            const nameCell = row.insertCell(0);
+                            const dateCell = row.insertCell(1);
+
+                            nameCell.textContent = appointment.name;
+                            dateCell.textContent = appointment.date;
+                        });
+                    } else {
+                        console.error('No appointments data available.');
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+
+
+        }
+        function closeModalHistoryDoctor() {
+            modalHistoryDoctor.style.display = "none";
+        }
+
+        window.onclick = function (event) {
+            if (event.target == modalAddDoctor) {
+                closeModalAddDoctor();
+            } else if (event.target == modalEditDoctor) {
+                closeModalEditDoctor();
+            } else if (event.target == modalHistoryDoctor) {
+                closeModalHistoryDoctor
+            }
+        }
+    </script>
 </body>
 
 </html>

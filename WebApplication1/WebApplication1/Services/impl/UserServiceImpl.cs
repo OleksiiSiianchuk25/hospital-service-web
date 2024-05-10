@@ -4,6 +4,7 @@ using EF.DTO.User;
 using EF.service.@interface;
 using Microsoft.EntityFrameworkCore;
 using MimeKit;
+using WebApplication1.Data.DTO.Patient;
 using WebApplication1.Data.DTO.User;
 using SmtpClient = MailKit.Net.Smtp.SmtpClient;
 
@@ -110,6 +111,19 @@ namespace EF.service.impl
 
             this.context.SaveChanges();
         }
+
+        public void EditPatient(EditPatientDTO user)
+        {
+            User updateUser = this.FindById(user.UserId);
+            updateUser.FirstName = user.FirstName;
+            updateUser.LastName = user.LastName;
+            updateUser.Phone = user.Phone;
+            updateUser.Email = user.Email;
+            
+
+            this.context.SaveChanges();
+        }
+
 
         /// <inheritdoc/>
         public List<User> GetDoctors()
