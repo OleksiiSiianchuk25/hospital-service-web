@@ -14,6 +14,7 @@ using EF.DTO.Appointment;
 using WebApplication1.Data.DTO.Appointment;
 using Microsoft.VisualBasic;
 using System.Data;
+using WebApplication1.Data.DTO.Patient;
 
 namespace WebApplication1.Controllers
 {
@@ -87,7 +88,7 @@ namespace WebApplication1.Controllers
 
         [HttpGet]
         [Route("/edit-appointment/{id}")]
-        public IActionResult EditAppointment(int id) // Параметр model буде автоматично заповнено з даних форми
+        public IActionResult EditAppointment(int id)
         {
             EF.Appointment model = _appointmentService.FindById(id);
             return Json(model);
@@ -95,18 +96,24 @@ namespace WebApplication1.Controllers
         }
 
 
-        [HttpPost] // Цей атрибут вказує, що метод відповідає на POST-запити
+        [HttpPost] 
         [Route("/add-new-doctor")]
-        public IActionResult AddNewDoctor(UserDTO model) // Параметр model буде автоматично заповнено з даних форми
+        public IActionResult AddNewDoctor(UserDTO model)
         {
-            
-            _userService.RegisterDoctor(model);
-            return Redirect("/api/doctors");
+            if (!this.ModelState.IsValid)
+            {
+                return this.BadRequest(this.ModelState);
+            }
+            else
+            {
+                _userService.RegisterDoctor(model);
+                return Redirect("/api/doctors");
+            }
         }
 
-        [HttpPost] // Цей атрибут вказує, що метод відповідає на POST-запити
+        [HttpPost] 
         [Route("/save-edit-doctor")]
-        public IActionResult SaveEditDoctor(UpdateUserDTO model) // Параметр model буде автоматично заповнено з даних форми
+        public IActionResult SaveEditDoctor(UpdateUserDTO model)
         {
             if (!ModelState.IsValid)
             {
@@ -156,17 +163,9 @@ namespace WebApplication1.Controllers
             return View();
         }
 
-        [HttpPost] // Цей атрибут вказує, що метод відповідає на POST-запити
+        [HttpPost] 
         [Route("/add-new-patient")]
-        public IActionResult AddNewPatient(UserRegistrationDTO model) // Параметр model буде автоматично заповнено з даних форми
-        {
-            _userService.RegisterPatient(model);
-            return Redirect("api/patients");
-        }
-
-        [HttpPost] // Цей атрибут вказує, що метод відповідає на POST-запити
-        [Route("/save-edit-patient")]
-        public IActionResult SaveEditPatient(UpdateUserDTO model) // Параметр model буде автоматично заповнено з даних форми
+        public IActionResult AddNewPatient(UserRegistrationDTO model) 
         {
             if (!ModelState.IsValid)
             {
@@ -175,7 +174,23 @@ namespace WebApplication1.Controllers
             }
             else
             {
-                _userService.EditUser(model);
+                _userService.RegisterPatient(model);
+                return Redirect("api/patients");
+            }
+        }
+
+        [HttpPost] 
+        [Route("/save-edit-patient")]
+        public IActionResult SaveEditPatient(EditPatientDTO model) 
+        {
+            if (!ModelState.IsValid)
+            {
+
+                return BadRequest(ModelState);
+            }
+            else
+            {
+                _userService.EditPatient(model);
             }
 
             return Redirect("/api/patients");
@@ -183,7 +198,7 @@ namespace WebApplication1.Controllers
 
         [HttpGet]
         [Route("/edit-patient/{id}")]
-        public IActionResult EditPatient(int id) // Параметр model буде автоматично заповнено з даних форми
+        public IActionResult EditPatient(int id) 
         {
             EF.User model = _userService.FindById(id);
             return Json(model);
@@ -195,7 +210,7 @@ namespace WebApplication1.Controllers
         public IActionResult GetPatientHistory(int id)
         {
             var docApp = _appointmentService.GetArchiveAppointmentsByUserId(id);
-            var historyData = new List<Appoint>(); // Передбачаючи, що тип Appoint відповідає типу записів історії
+            var historyData = new List<Appoint>(); 
 
             foreach (var appointment in docApp)
             {
