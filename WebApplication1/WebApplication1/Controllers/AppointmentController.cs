@@ -44,8 +44,7 @@ namespace WebApplication1.Controllers
                     s.PatientRefNavigation.LastName.Contains(searchString) ||
                     s.DoctorRefNavigation.FirstName.Contains(searchString) ||
                     s.DoctorRefNavigation.LastName.Contains(searchString) ||
-                    s.DateAndTime.ToString().Contains(searchString) ||
-                    s.Message.Contains(searchString)).ToList();
+                    s.DateAndTime.ToString().Contains(searchString)).ToList();
             }
 
             switch (sortOrder)

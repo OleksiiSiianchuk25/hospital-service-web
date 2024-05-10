@@ -553,20 +553,70 @@
     </div>
 
 
+    <!--EDIT APPOINTMENT-->
+    <div id="myModalEditAppointment" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModalEditAppointmentAdmin()">&times;</span>
+            <h2 class="dialog-text">Створити запис</h2>
+            <form action="/save-edit-appointment" method="post">
+                <input type="hidden" id="selectedDoctor2" name="doctorRef" value="">
+                <input type="hidden" id="selectedPatient2" name="patientRef" value="">
+                <input type="hidden" id="selectedDate2" name="date" value="">
+                <input type="hidden" id="selectedTime2" name="time" value="">
+                <label for="doctors">Оберіть лікаря:</label>
+                <select id="doctors2" name="doctors" class="rounded-input">
+                </select>
+
+                <label for="patients">Оберіть пацієнта:</label>
+                <select id="patients2" name="patients" class="rounded-input">
+                </select>
+                <div class="form-row">
+                    <div>
+                        <label for="data">Оберіть дату:</label>
+                        <select id="data2" name="data" class="rounded-input">
+                        </select>
+                    </div>
+                    <div>
+                        <label for="time">Оберіть час:</label>
+                        <select id="time2" name="time" class="rounded-input">
+                        </select>
+                    </div>
+
+
+                </div>
+                <button class="add-doctor" type="submit">Зберегти</button>
+            </form>
+
+        </div>
+    </div>
+
+
 </body>
 
 <script>
     const modalAddAppointment = document.getElementById('myModalAddAppointment');
+    const modalEditAppointment = document.getElementById('myModalEditAppointment');
+
     const doctorsSelect = document.getElementById('doctors');
     const patientsSelect = document.getElementById('patients');
     const dateSelect = document.getElementById('data');
     const timeSelect = document.getElementById('time');
+
+    const doctorsSelect2 = document.getElementById('doctors2');
+    const patientsSelect2 = document.getElementById('patients2');
+    const dateSelect2 = document.getElementById('data2');
+    const timeSelect2 = document.getElementById('time2');
 
 
     var selectedDoctor = doctorsSelect.value;
     var selectedPatient = patientsSelect.value;
     var selectedDate = dateSelect.value;
     var selectedTime = timeSelect.value;
+
+    var selectedDoctor2 = doctorsSelect2.value;
+    var selectedPatient2 = patientsSelect2.value;
+    var selectedDate2 = dateSelect2.value;
+    var selectedTime2 = timeSelect2.value;
 
 
     doctorsSelect.addEventListener('change', updateHiddenFields);
@@ -575,6 +625,13 @@
     timeSelect.addEventListener('change', updateHiddenFields);
     doctorsSelect.addEventListener('change', handleFormChange);
     dateSelect.addEventListener('change', handleFormChange);
+
+    doctorsSelect2.addEventListener('change', updateHiddenFields2);
+    patientsSelect2.addEventListener('change', updateHiddenFields2);
+    dateSelect2.addEventListener('change', updateHiddenFields2);
+    timeSelect2.addEventListener('change', updateHiddenFields2);
+    doctorsSelect2.addEventListener('change', handleFormChange2);
+    dateSelect2.addEventListener('change', handleFormChange2);
 
     function handleFormChange() {
         selectedDoctor = doctorsSelect.value; // Оновлюємо значення вибраного лікаря при його зміні
@@ -593,13 +650,99 @@
         document.getElementById('selectedDate').value = selectedDate;
         document.getElementById('selectedTime').value = selectedTime;
 
-        console.log(document.getElementById('selectedDoctor').value);
-        console.log(document.getElementById('selectedPatient').value);
-        console.log(document.getElementById('selectedDate').value);
-        console.log(document.getElementById('selectedTime').value);
+      
+    }
+
+    function handleFormChange2() {
+        selectedDoctor2 = doctorsSelect2.value; // Оновлюємо значення вибраного лікаря при його зміні
+        selectedDate2 = dateSelect2.value; // Оновлюємо значення вибраної дати при її зміні
+        fetchFreeHours2(selectedDoctor2, selectedDate2); // Викликаємо функцію для завантаження вільних годин
+    }
+
+    function updateHiddenFields2() {
+        selectedDoctor2 = doctorsSelect2.value;
+        selectedPatient2 = patientsSelect2.value;
+        selectedDate2 = dateSelect2.value;
+        selectedTime2 = timeSelect2.value;
+
+        document.getElementById('selectedDoctor2').value = selectedDoctor2;
+        document.getElementById('selectedPatient2').value = selectedPatient2;
+        document.getElementById('selectedDate2').value = selectedDate2;
+        document.getElementById('selectedTime2').value = selectedTime2;
+
+        console.log(document.getElementById('selectedDoctor2').value);
+        console.log(document.getElementById('selectedPatient2').value);
+        console.log(document.getElementById('selectedDate2').value);
+        console.log(document.getElementById('selectedTime2').value);
     }
 
    
+    function openModalEditAppointment(id) {
+        modalEditAppointment.style.display = "block";
+
+        // Очищаємо вміст випадаючих списків перед заповненням новими значеннями
+        doctorsSelect2.innerHTML = '';
+        patientsSelect2.innerHTML = '';
+        dateSelect2.innerHTML = '';
+        timeSelect2.innerHTML = '';
+
+        var idDoctor;
+        var idPatient;
+        var idAppointment;
+
+        fetch(`/edit-appointment/${id}`)
+            .then(response => response.json())
+            .then(appointment => {
+                idDoctor = appointment.doctorRef;
+                idPatient = appointment.patientRef;
+                idAppointment = appointment.appointmentId;
+                console.log("idDoc" + idDoctor);
+            })
+            .catch(error => console.error('Error:', error));
+        fetch(`/get-users`)
+            .then(response => response.json())
+            .then(doctorViewModel => {
+                if (doctorViewModel && doctorViewModel.doctors) {
+                    const doctors = doctorViewModel.doctors;
+                    doctors.forEach(doctor => {
+                        const option = document.createElement('option');
+                        option.text = doctor.firstName + " " + doctor.lastName + "  " + doctor.type;
+                        option.value = doctor.userId;
+                        console.log(doctor.userId);
+                        doctorsSelect2.add(option);
+                        if (idDoctor == doctor.userId) {
+                            option.selected = true;
+                        }
+                    });
+                }
+                if (doctorViewModel && doctorViewModel.patients) {
+                    const patients = doctorViewModel.patients;
+                    patients.forEach(patient => {
+                        const option = document.createElement('option');
+                        option.text = patient.firstName + " " + patient.lastName;
+                        option.value = patient.userId;
+                        patientsSelect2.add(option);
+                        if (idPatient == patient.userId) {
+                            option.selected = true;
+                        }
+                    });
+                }
+            })
+            .catch(error => console.error('Error:', error));
+
+        fetch(`/get-dates`)
+            .then(response => response.json())
+            .then(dates => {
+                dates.forEach(date => {
+                    const option = document.createElement('option');
+                    option.text = date.substring(0, 10);
+                    option.value = date;
+                    dateSelect2.add(option);
+                });
+            })
+            .catch(error => console.error('Error:', error));
+    }
+
 
     function openModalAddAppointment() {
         modalAddAppointment.style.display = "block";
@@ -648,6 +791,7 @@
     }
 
     function fetchFreeHours(doctor, date) {
+
     fetch(`/get-free-hours?doctor=${doctor}&date=${date}`)
         .then(response => response.json())
         .then(freeHours => {
@@ -663,6 +807,23 @@
         })
         .catch(error => console.error('Error:', error));
 }
+    function fetchFreeHours2(doctor, date) {
+        timeSelect2.innerHTML = '';
+        fetch(`/get-free-hours?doctor=${doctor}&date=${date}`)
+            .then(response => response.json())
+            .then(freeHours => {
+                // Очищаємо список варіантів
+                timeSelect.innerHTML = '';
+                // Додаємо нові варіанти з отриманих вільних годин
+                freeHours.forEach(hour => {
+                    const option = document.createElement('option');
+                    option.text = hour.substring(11, 16);
+                    option.value = hour;
+                    timeSelect2.add(option);
+                });
+            })
+            .catch(error => console.error('Error:', error));
+    }
 
 
     function saveAppointment() {

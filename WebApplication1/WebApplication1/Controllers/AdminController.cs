@@ -58,6 +58,33 @@ namespace WebApplication1.Controllers
             return Redirect("/api/appointments");
         }
 
+
+        [HttpPost] // Цей атрибут вказує, що метод відповідає на POST-запити
+        [Route("/save-edit-appointment")]
+        public IActionResult SaveEditAppointment(AppointmentRegisterDTO model) // Параметр model буде автоматично заповнено з даних форми
+        {
+
+            AppointmentDTO appointmentDTO = new AppointmentDTO();
+            appointmentDTO.DoctorRef = model.DoctorRef;
+            appointmentDTO.PatientRef = model.PatientRef;
+            DateTime date = DateTime.Parse(model.Date);
+            DateTime time = DateTime.Parse(model.Time);
+
+            // Встановлюємо дату для часу, якщо вона не задана
+            if (time.Date == DateTime.MinValue.Date)
+            {
+                time = date.Date + time.TimeOfDay;
+            }
+
+            // Отримуємо повний об'єкт DateTime
+            DateTime dateTime = date.Date + time.TimeOfDay;
+
+            appointmentDTO.DateAndTime = dateTime;
+
+            _appointmentService.AddNew(appointmentDTO);
+            return Redirect("/api/appointments");
+        }
+
         [HttpGet]
         [Route("/edit-appointment/{id}")]
         public IActionResult EditAppointment(int id) // Параметр model буде автоматично заповнено з даних форми
