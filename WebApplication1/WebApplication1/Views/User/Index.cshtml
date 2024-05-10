@@ -478,7 +478,7 @@ a {
                                         </button>
                                     </td>
                                     <td>
-                                        <a class="table-btn-img" asp-controller="Users" asp-action="Delete" asp-route-id="@doctor.UserId">
+                                    <a class="table-btn-img" asp-controller="Users" asp-action="Delete" asp-route-id="@doctor.UserId" onclick="openModalDelete(@doctor.UserId)">
                                                 <img src="~/images/delete.svg" alt="Stats" class="table-img">
                                         </a>
                                     </td>
@@ -591,7 +591,27 @@ a {
             </form>
         </div>
     </div>
+    <div id="myModalDelete" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModalDelete()">&times;</span>
+            <form action="confirm-delete-doctor" method="post">
+                <p style="color:red">Ви впевнені що бажаєте видалити?</p>
+                <input type="hidden" id="DeleteId" name="DeleteId" class="rounded-input">
+                <button class="add-doctor" type="submit">Видалити</button>
+            </form>
+            <button class="add-doctor" onclick="closeModalDelete()">Скасувати</button>
+
+        </div>
+    </div>
 <script>
+        var modalDelete = document.getElementById("myModalDelete");
+        function openModalDelete(id) {
+            modalDelete.style.display = "block";
+            document.getElementById("DeleteId").value = id;
+        }
+        function closeModalDelete() {
+            modalDelete.style.display = "none";
+        }
         var modalProfile = document.getElementById("myModalProfile");
 
         function openModalProfile() {

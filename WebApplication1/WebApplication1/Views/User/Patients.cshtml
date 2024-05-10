@@ -118,6 +118,16 @@
             margin-left: auto;
         }
 
+        .add-doctor{
+            border: none;
+            background-color: #AD99DA;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            margin-left: auto;
+        }
+
         /* Стилі для розділення на дві колонки */
         .form-row {
             display: flex;
@@ -478,7 +488,7 @@ a {
                                             </button>
                                         </td>
                                         <td>
-                                            <button class="table-btn-img" asp-controller="Users" asp-action="Delete" asp-route-id="@patient.UserId">
+                                    <button class="table-btn-img" asp-controller="Users" asp-action="Delete" asp-route-id="@patient.UserId" onclick="openModalDelete(@patient.UserId)">
                                                     <img src="~/images/delete.svg" alt="Stats" class="table-img">
                                             </button>
                                         </td>
@@ -585,7 +595,27 @@ a {
             </form>
         </div>
     </div>
+    <div id="myModalDelete" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModalDelete()">&times;</span>
+            <form action="confirm-delete-patient" method="post">
+                <p style="color:red">Ви впевнені що бажаєте видалити?</p>
+                <input type="hidden" id="DeleteId" name="DeleteId" class="rounded-input">
+                <button class="add-doctor" type="submit">Видалити</button>
+            </form>
+            <button class="add-doctor" onclick="closeModalDelete()">Скасувати</button>
+
+        </div>
+    </div>
     <script>
+        var modalDelete = document.getElementById("myModalDelete");
+        function openModalDelete(id) {
+            modalDelete.style.display = "block";
+            document.getElementById("DeleteId").value = id;
+        }
+        function closeModalDelete() {
+            modalDelete.style.display = "none";
+        }
         var modalProfile = document.getElementById("myModalProfile");
 
         function openModalProfile() {

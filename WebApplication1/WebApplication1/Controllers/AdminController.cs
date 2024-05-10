@@ -306,7 +306,29 @@ namespace WebApplication1.Controllers
             return Json(_appointmentService.GetFreeHoursByDoctorId(long.Parse(doctor), date2));
         }
 
+        [HttpPost]
+        [Route("confirm-delete-patient")]
+        public IActionResult DeletePatient(long DeleteId)
+        {
+            _userService.DeleteById(DeleteId);
+            return Redirect("/api/patients");
+        }
 
+        [HttpPost]
+        [Route("confirm-delete-doctor")]
+        public IActionResult DeleteDoctor(long DeleteId)
+        {
+            _userService.DeleteById(DeleteId);
+            return Redirect("/api/doctors");
+        }
+
+        [HttpPost]
+        [Route("confirm-delete-appointment")]
+        public IActionResult DeleteAppointment(long DeleteId)
+        {
+            _appointmentService.DeleteById(DeleteId);
+            return Redirect("/api/appointments");
+        }
 
     }
 }
