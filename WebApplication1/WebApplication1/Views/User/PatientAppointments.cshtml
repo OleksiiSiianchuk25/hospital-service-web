@@ -1,4 +1,4 @@
-﻿@model X.PagedList.IPagedList<EF.Appointment>
+﻿@using WebApplication1.Data.models;
 @using X.PagedList.Mvc.Core;
 @{
     ViewData["Title"] = "User Appointment Table Page";
@@ -41,102 +41,150 @@
         background-color: #FFFFFF; /* Бірий колір */
         overflow: auto; 
     }
-    .modal {
-        display: none; /* Початково прихований */
-        position: fixed;
-        z-index: 1;
-        left: 0;
-        top: 0;
-        width: 100%;
-        height: 100%;
-        overflow: auto;
-        background-color: rgba(0,0,0,0.4); /* Напівпрозорий фон */
-    }
+        /*ЗДРАВИЙ КОД*/
+        .modal {
+            display: none; /* Початково прихований */
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.4); /* Напівпрозорий фон */
+        }
 
-    .modal-edit {
-        display: none; /* Початково прихований */
-        position: fixed;
-        z-index: 1;
-        left: 0;
-        top: 0;
-        width: 100%;
-        height: 100%;
-        overflow: auto;
-        background-color: rgba(0,0,0,0.4); /* Напівпрозорий фон */
-    }
+        .modal-edit {
+            display: none; /* Початково прихований */
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.4); /* Напівпрозорий фон */
+        }
 
-    .modal-content {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 30%;
-    height: 50%;
-    border-radius: 20px;
-    background-color: #FFFFFF;
-    padding: 40px;
-    }
+        .modal-content {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 30%;
+            height: 50%;
+            border-radius: 20px;
+            background-color: #FFFFFF;
+            padding: 40px;
+        }
 
 
-    /* Закриття модального вікна */
-    .close {
-        color: #aaa;
-        float: right;
-        font-size: 28px;
-        font-weight: bold;
-    }
+        /* Закриття модального вікна */
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
 
-    .close:hover,
-    .close:focus {
-        color: black;
-        text-decoration: none;
-        cursor: pointer;
-    }
-    .form-group {
-    margin-bottom: 20px;
-}
+            .close:hover,
+            .close:focus {
+                color: black;
+                text-decoration: none;
+                cursor: pointer;
+            }
 
-/* Заокруглення форм */
-.rounded-input {
-    border-radius: 20px;
-    border: 3px solid #AD99DA;
-    padding: 8px;
-    width: calc(100% - 16px);
-}
+        .form-group {
+            margin-bottom: 20px;
+        }
 
-/* Стилізація кнопки */
-button[type="submit"] {
-    border: none;
-    background-color: #AD99DA;
-    color: white;
-    padding: 10px 20px;
-    border-radius: 10px;
-    cursor: pointer;
-    margin-left: auto;
-}
+        /* Заокруглення форм */
+        .rounded-input {
+            border-radius: 20px;
+            border: 3px solid #AD99DA;
+            padding: 8px;
+            width: calc(100% - 16px);
+        }
 
-/* Стилі для розділення на дві колонки */
-.form-row {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 20px;
-}
+        /* Стилізація кнопки */
+        button[type="submit"] {
+            border: none;
+            background-color: #AD99DA;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            margin-left: auto;
+        }
 
-/* Горизонтальний відступ між формами */
-.form-row input {
-    margin-right: 10px;
-}
+        
 
-/* Стилі для кнопки */
-button[type="submit"] {
-    margin-top: -10px;
+        /* Стилі для розділення на дві колонки */
+        .form-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
 
-}
-.dialog-text{
-    color: #B6AEE5;
-    font-size: 24px;
-    font-weight: bold;
-}
+            /* Горизонтальний відступ між формами */
+            .form-row input {
+                margin-right: 10px;
+            }
+
+        /* Стилі для кнопки */
+        button[type="submit"] {
+            margin-top: -10px;
+        }
+
+        .dialog-text {
+            color: #B6AEE5;
+            font-size: 24px;
+            font-weight: bold;
+        }
+        /* Стилі для таблиці */
+        /* Стилі для таблиці */
+        .table-history {
+            width: 90%; /* Ширина таблиці */
+            margin: 0 auto; /* Вирівнювання по центру */
+            border-collapse: collapse; /* Злиття меж між комірками */
+            overflow-y: auto; /* Додавання вертикального скролу */
+            max-height: 100px; /* Максимальна висота таблиці */
+        }
+
+
+            /* Стилі для заголовків таблиці */
+            .table-history th {
+                font-weight: bold; /* Жирний шрифт */
+                border-bottom: 1px solid #ccc; /* Горизонтальна лінія між заголовками і рядками */
+                padding: 10px; /* Відступи від тексту до межі комірки */
+                background-color: white;
+            }
+
+            /* Стилі для комірок таблиці */
+            .table-history td {
+                border-bottom: 1px solid #ccc; /* Горизонтальна лінія між рядками */
+                padding: 10px; /* Відступи від тексту до межі комірки */
+                background-color: white;
+            }
+
+        .dialog-table {
+            overflow-y: auto; /* Додавання вертикального скролу */
+            max-height: 200px;
+            position: relative; /* Потрібно для позиціонування фонової смуги */
+        }
+
+            /* Стилі для повзунка */
+            .dialog-table::-webkit-scrollbar-thumb {
+                background-color: red; /* Колір повзунка */
+                border-radius: 10px; /* Радіус кутів */
+            }
+
+            /* Стилі для фонової смуги */
+            .dialog-table::-webkit-scrollbar-track {
+                background-color: #8a2be2; /* Колір фонової смуги */
+                border-radius: 10px; /* Радіус кутів */
+            }
+        /*КІНЕЦЬ ЗДРАВОГО КОДУ*/
 
 .custom-table-container {
     overflow: hidden; /* Відключаємо прокрутку таблиці */
@@ -411,6 +459,7 @@ a {
 </style>
 </head>
 <body>
+    @model DoctorViewModel
     <div class="window">
         <div class="left-menu">
             <div class="menu-images">
@@ -429,6 +478,7 @@ a {
 
             <div class="nearest-appointment">
                 <h2>Найближчий запис</h2>
+
                 @if (ViewBag.NearestAppointment != null)
                 {
                     var nearest = ViewBag.NearestAppointment as EF.Appointment;
@@ -452,8 +502,10 @@ a {
                 {
                         <p style="color: #AD99DA; margin-top: 0;">Відсутній</p>
                 }
-            </div>
+                <button onclick="openModalAddAppointment()" style="border: none; background-color: #AD99DA; color: white; padding: 10px 20px; border-radius: 10px; cursor: pointer; position: absolute;top: 75px; right: 140px;">Створити запис</button>
 
+            </div>
+            
             <div class="custom-table-container">
                 @using (Html.BeginForm())
                 {
@@ -480,7 +532,7 @@ a {
                     </thead>
 
                     <tbody>
-                        @foreach (var appointment in Model)
+                        @foreach (var appointment in Model.IAppointment)
                         {
                             <tr>
                                 <td>
@@ -496,8 +548,8 @@ a {
                         </tbody>
                     </table>
                 <div class="pagination-container">
-                    @Html.PagedListPager(Model, page => Url.Action("PatientAppointments", new { page, sortOrder = ViewBag.LastNameSortParm }), 
-                        new PagedListRenderOptions { 
+                    @Html.PagedListPager(Model.IAppointment, page => Url.Action("PatientAppointments", new { page, sortOrder = ViewBag.LastNameSortParm }),
+                    new PagedListRenderOptions { 
                             LiElementClasses = new string[] { "custom-pagination-item" }, 
                             UlElementClasses = new string[] { "custom-pagination-list" },
                             Display = PagedListDisplayMode.IfNeeded,
@@ -508,6 +560,137 @@ a {
             </div>
         </div>
     </div>
+
+    <!--ADD APPOINTMENT-->
+    <div id="myModalAddAppointment" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModalAddAppointmentAdmin()">&times;</span>
+            <h2 class="dialog-text">Створити запис</h2>
+            <form action="/add-new-appointment-patient" method="post">
+                <input type="hidden" id="selectedDoctor" name="doctorRef" value="">
+                <input type="hidden" id="selectedPatient" name="patientRef" value="33">
+                <input type="hidden" id="selectedDate" name="date" value="">
+                <input type="hidden" id="selectedTime" name="time" value="">
+                <label for="doctors">Оберіть лікаря:</label>
+                <select id="doctors" name="doctors" class="rounded-input">
+                </select>
+
+               
+                <div class="form-row">
+                    <div>
+                        <label for="data">Оберіть дату:</label>
+                        <select id="data" name="data" class="rounded-input">
+                        </select>
+                    </div>
+                    <div>
+                        <label for="time">Оберіть час:</label>
+                        <select id="time" name="time" class="rounded-input">
+                        </select>
+                    </div>
+
+
+                </div>
+                <button class="add-doctor" type="submit">Зберегти</button>
+            </form>
+
+        </div>
+    </div>
+
+
+
+
 </body>
+<script>
+    const modalAddAppointment = document.getElementById('myModalAddAppointment');
+
+    const doctorsSelect = document.getElementById('doctors');
+    const dateSelect = document.getElementById('data');
+    const timeSelect = document.getElementById('time');
+
+    doctorsSelect.addEventListener('change', updateHiddenFields);
+    dateSelect.addEventListener('change', updateHiddenFields);
+    timeSelect.addEventListener('change', updateHiddenFields);
+    doctorsSelect.addEventListener('change', handleFormChange);
+    dateSelect.addEventListener('change', handleFormChange);
+
+    function handleFormChange() {
+        selectedDoctor = doctorsSelect.value; // Оновлюємо значення вибраного лікаря при його зміні
+        selectedDate = dateSelect.value; // Оновлюємо значення вибраної дати при її зміні
+        fetchFreeHours(selectedDoctor, selectedDate); // Викликаємо функцію для завантаження вільних годин
+    }
+
+    function updateHiddenFields() {
+        selectedDoctor = doctorsSelect.value;
+        selectedDate = dateSelect.value;
+        selectedTime = timeSelect.value;
+
+        document.getElementById('selectedDoctor').value = selectedDoctor;
+        document.getElementById('selectedDate').value = selectedDate;
+        document.getElementById('selectedTime').value = selectedTime;
+
+
+    }
+
+    function openModalAddAppointment() {
+        modalAddAppointment.style.display = "block";
+
+        // Очищаємо вміст випадаючих списків перед заповненням новими значеннями
+        doctorsSelect.innerHTML = '';
+        dateSelect.innerHTML = '';
+        timeSelect.innerHTML = '';
+
+        fetch(`/get-users`)
+            .then(response => response.json())
+            .then(doctorViewModel => {
+                if (doctorViewModel && doctorViewModel.doctors) {
+                    const doctors = doctorViewModel.doctors;
+                    doctors.forEach(doctor => {
+                        const option = document.createElement('option');
+                        option.text = doctor.firstName + " " + doctor.lastName + "  " + doctor.type;
+                        option.value = doctor.userId;
+                        doctorsSelect.add(option);
+                    });
+                }
+            })
+            .catch(error => console.error('Error:', error));
+
+        fetch(`/get-dates`)
+            .then(response => response.json())
+            .then(dates => {
+                dates.forEach(date => {
+                    const option = document.createElement('option');
+                    option.text = date.substring(0, 10);
+                    option.value = date;
+                    dateSelect.add(option);
+                });
+            })
+            .catch(error => console.error('Error:', error));
+    }
+
+
+    function fetchFreeHours(doctor, date) {
+
+        fetch(`/get-free-hours?doctor=${doctor}&date=${date}`)
+            .then(response => response.json())
+            .then(freeHours => {
+                // Очищаємо список варіантів
+                timeSelect.innerHTML = '';
+                // Додаємо нові варіанти з отриманих вільних годин
+                freeHours.forEach(hour => {
+                    const option = document.createElement('option');
+                    option.text = hour.substring(11, 16);
+                    option.value = hour;
+                    timeSelect.add(option);
+                });
+            })
+            .catch(error => console.error('Error:', error));
+    }
+    function closeModalAddAppointmentAdmin() {
+        modalAddAppointment.style.display = "none";
+    }
+
+   
+</script>
+
 
 </html>

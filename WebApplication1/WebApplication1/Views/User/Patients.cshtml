@@ -439,7 +439,6 @@ a {
                         @Html.TextBox("searchString")  
                             </div>
                 }
-                <button onclick="openModalAddDoctor()">Додати лікаря</button>
                 <table class="custom-table">
                     <thead>
                         <tr>
@@ -455,6 +454,7 @@ a {
                             <th colspan="3" class="actions-col">Actions</th>
                         </tr>
                     </thead>
+                    <button onclick="openModalAddDoctor()" style="border: none; background-color: #AD99DA; color: white; padding: 10px 20px; border-radius: 10px; cursor: pointer; position: absolute;top: 75px; right: 140px;">Додати пацієнта</button>
 
                     <tbody>
                         @foreach (var patient in Model.IUsers)
