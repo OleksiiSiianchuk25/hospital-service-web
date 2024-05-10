@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace WebApplication1.Controllers
 {
+    [Route("api")]
     public class StatsController : Controller
     {
         private readonly IRoleService roleService;

@@ -111,19 +111,19 @@
                 <div><p class="lable">Реєстрація</p></div>
                 <form asp-action="Registration" class="form" id="loginForm" action="/api/registration" method="post">
                     <div class="form-row">
-                        <input asp-for="FirstName" type="text" id="FirstName" name="FirstName" class="rounded-input" placeholder="Ім'я">
+                        <input type="text" id="FirstName" name="FirstName" class="rounded-input" placeholder="Ім'я" required>
                         <span asp-validation-for="FirstName"></span>
-                        <input type="text" id="LastName" asp-for="LastName" name="LastName" class="rounded-input" placeholder="Прізвище">
+                        <input type="text" id="LastName" name="LastName" class="rounded-input" placeholder="Прізвище" required>
                         <span asp-validation-for="LastName" class="text-danger"></span>
                     </div>
                     <div class="form-row">
-                        <input type="text" id="Phone" asp-for="Phone" name="Phone" class="rounded-input" placeholder="Телефон">
+                        <input type="text" id="Phone" name="Phone" class="rounded-input" placeholder="Телефон" required>
                         <span asp-validation-for="Phone" class="text-danger"></span>
                     </div>
                     <div class="form-row">
-                        <input type="email" id="email" asp-for="Email" name="Email" class="rounded-input" placeholder="Пошта">
+                        <input type="email" id="email" name="Email" class="rounded-input" placeholder="Пошта" required>
                         <span asp-validation-for="Email" class="text-danger"></span>
-                        <input type="password" id="password" asp-for="Password" name="Password" class="rounded-input" placeholder="Пароль">
+                        <input type="password" id="password" name="Password" class="rounded-input" placeholder="Пароль" required>
                         <span asp-validation-for="Password" class="text-danger"></span>
                     </div>
                     

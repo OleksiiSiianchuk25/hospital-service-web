@@ -8,6 +8,7 @@ using WebApplication1.Data;
 using WebApplication1.Data.DTO.User;
 using X.PagedList;
 using WebApplication1.Data.models;
+using Org.BouncyCastle.Bcpg;
 
 namespace WebApplication1.Controllers
 {
@@ -98,17 +99,17 @@ namespace WebApplication1.Controllers
                 if (user.RoleRef == this.roleService.GetPatientRole().RoleId)
                 {
                     this.logger.Info("Redirecting to patient page");
-                    return this.Redirect("/patient");
+                    return this.Redirect("patient");
                 } 
                 else if(user.RoleRef == this.roleService.GetDoctorRole().RoleId)
                 {
                     this.logger.Info("Redirecting to doctor page");
-                    return this.Redirect("/doctor");
+                    return this.Redirect("doctor");
                 }
                 else
                 {
                     this.logger.Info("Redirecting to admin page");
-                    return this.Redirect("/admin");
+                    return this.Redirect("stats");
                 }
             }
         }
@@ -259,9 +260,10 @@ namespace WebApplication1.Controllers
 
         [HttpPost]
         [HttpGet]
-        [Route("patient/{userId}")]
-        public IActionResult PatientAppointments(int userId, string sortOrder, string currentFilter, string searchString, int? page)
+        [Route("patient")]
+        public IActionResult PatientAppointments(string sortOrder, string currentFilter, string searchString, int? page)
         {
+            long userId = Context.UserId;
             this.ViewBag.CurrentSort = sortOrder;
             this.ViewBag.DateSortParm = string.IsNullOrEmpty(sortOrder) ? "date_desc" : "";
             this.ViewBag.DoctorSortParm = sortOrder == "Doctor" ? "doctor_desc" : "Doctor";
@@ -326,9 +328,10 @@ namespace WebApplication1.Controllers
 
         [HttpPost]
         [HttpGet]
-        [Route("doctor/{userId}")]
-        public IActionResult DoctorAppointments(int userId, string sortOrder, string currentFilter, string searchString, int? page)
+        [Route("doctor")]
+        public IActionResult DoctorAppointments(string sortOrder, string currentFilter, string searchString, int? page)
         {
+            long userId = Context.UserId;
             this.ViewBag.CurrentSort = sortOrder;
             this.ViewBag.DateSortParm = string.IsNullOrEmpty(sortOrder) ? "date_desc" : "";
             this.ViewBag.PatientSortParm = sortOrder == "Patient" ? "patient_desc" : "Patient";

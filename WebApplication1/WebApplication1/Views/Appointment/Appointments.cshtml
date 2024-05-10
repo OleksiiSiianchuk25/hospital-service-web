@@ -415,7 +415,7 @@
         <div class="left-menu">
             <div class="menu-images">
                 <div class="menu-item">
-                    <img src="~/images/admin.svg" alt="Admin" class="admin-img">
+                    <img src="~/images/admin.svg" alt="Admin" class="admin-img" onclick="openModalProfile()">
                     <span class="admin-label">Адмін</span>
                 </div>
                 <a href="/api/doctors">
@@ -432,7 +432,7 @@
                     <img src="~/images/records.svg" alt="Records" class="menu-img">
                     <span class="menu-label">Записи</span>
                 </a>
-                <a href="/stats" class="menu-item">
+                <a href="/api/stats" class="menu-item">
                     <img src="~/images/stats.svg" alt="Stats" class="menu-img">
                     <span class="menu-label">Статистика</span>
                 </a>
@@ -460,6 +460,7 @@
                             <th>
                                 <a class="th-href" href="@Url.Action("Appointments", new { sortOrder = ViewBag.DateSortParm, currentFilter = ViewBag.CurrentFilter })">Дата</a>
                             </th>
+                            <th>Статус</th>
                             <th>Коментар</th>
                             <th colspan="3" class="actions-col">Дії</th>
                         </tr>
@@ -479,6 +480,7 @@
                                     @Html.DisplayFor(modelItem => appointment.DoctorRefNavigation.Patronymic)
                                 </td>
                                 <td class="table-date">@appointment.DateAndTime.ToString("dd.MM.yyyy")<br />@appointment.DateAndTime.ToString("HH:mm") - @appointment.DateAndTime.AddMinutes(30).ToString("HH:mm")</td>
+                                <td>@Html.DisplayFor(modelItem => appointment.Status)</td>
                                 <td>@Html.DisplayFor(modelItem => appointment.Message)</td>
 
                                 <td>
@@ -487,7 +489,7 @@
                                     </button>
                                 </td>
                                 <td>
-                                    <a class="table-btn-img" asp-controller="Users" asp-action="Delete" asp-route-id="@appointment.AppointmentId">
+                                    <a class="table-btn-img" asp-controller="Users" asp-action="Delete" asp-route-id="@appointment.AppointmentId" href="archive-appointment/@appointment.AppointmentId">
                                         <img src="~/images/edit.svg" alt="Stats" class="table-img">
                                     </a>
                                 </td>
@@ -590,11 +592,55 @@
 
         </div>
     </div>
-
+    <div id="myModalProfile" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModalProfile()">&times;</span>
+            <h2 class="dialog-text">Профіль</h2>
+            <form action="login" method="get">
+                <div class="form-row">
+                    <input type="text" id="firstName5" name="firstName" class="rounded-input" placeholder="Ім'я" readonly>
+                    <input type="text" id="lastName5" name="lastName" class="rounded-input" placeholder="Прізвище" readonly>
+                </div>
+                <div class="form-row">
+                    <input type="text" id="middleName5" name="patronymic" class="rounded-input" placeholder="По батькові" readonly>
+                    <input type="text" id="position5" name="type" class="rounded-input" placeholder="Посада" readonly>
+                </div>
+                <div class="form-row">
+                    <input type="tel" id="phone5" name="phone" class="rounded-input" placeholder="Телефон" readonly>
+                    <input type="email" id="email5" name="email" class="rounded-input" placeholder="Пошта" readonly>
+                </div>
+                <button class="add-doctor" type="submit">Вийти</button>
+            </form>
+        </div>
+    </div>
 
 </body>
 
 <script>
+    var modalProfile = document.getElementById("myModalProfile");
+
+    function openModalProfile() {
+        modalProfile.style.display = "block";
+
+        fetch(`/edit-doctor/${@WebApplication1.Data.Context.UserId}`)
+            .then(response => response.json())
+            .then(userDTO => {
+                document.getElementById("firstName5").value = userDTO.firstName;
+                document.getElementById("lastName5").value = userDTO.lastName;
+                document.getElementById("middleName5").value = userDTO.patronymic;
+                document.getElementById("position5").value = userDTO.type;
+                document.getElementById("phone5").value = userDTO.phone;
+                document.getElementById("email5").value = userDTO.email;
+            })
+            .catch(error => {
+                console.error('Error fetching data:', error);
+            });
+    }
+
+
+    function closeModalProfile() {
+        modalProfile.style.display = "none";
+    }
     const modalAddAppointment = document.getElementById('myModalAddAppointment');
     const modalEditAppointment = document.getElementById('myModalEditAppointment');
 

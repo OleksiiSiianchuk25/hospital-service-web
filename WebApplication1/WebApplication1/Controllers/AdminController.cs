@@ -233,6 +233,15 @@ namespace WebApplication1.Controllers
         }
 
         [HttpGet]
+        [Route("archive-appointment/{id}")]
+        public IActionResult ArchiveAppointment(int id)
+        {
+            _appointmentService.ArchiveById(id);
+            return Redirect("/api/appointments");
+
+        }
+
+        [HttpGet]
         [Route("/history-patient/{id}")]
         public IActionResult GetPatientHistory(int id)
         {
@@ -299,12 +308,6 @@ namespace WebApplication1.Controllers
 
 
 
-        [HttpGet]
-        [Route("patient")]
-        public IActionResult PatientPage()
-        {
-            return View();
-        }
     }
 }
 
