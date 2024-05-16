@@ -40,7 +40,7 @@
         width: calc(80% - 0px);
         height: 100%;
         background-color: #FFFFFF;
-        overflow: auto; 
+        overflow: hidden;
     }
     /*ЗДРАВИЙ КОД*/
         .modal {
@@ -105,6 +105,7 @@
             border: 3px solid #AD99DA;
             padding: 8px;
             width: calc(100% - 16px);
+            font-weight: bold;
         }
 
         /* Стилізація кнопки */
@@ -201,6 +202,7 @@ th, td {
     text-align: left;   
     overflow: hidden;
     font-size: 14px;
+    font-family: 'Rubik', sans-serif;
 }
 
 td {
@@ -244,6 +246,8 @@ tr:hover {
     display: flex;
     justify-content: center;
     padding-right: 8px;
+    border: none;
+    background: none;
 }
 
 .actions-col {
@@ -336,6 +340,10 @@ background: #B6AEE5;
     margin-top:38px;
     color:#FFFFFF;
     font-family:Rubik;
+}
+
+* {
+    font-family: 'Rubik', sans-serif;
 }
 
 .number-rectangle {
@@ -438,7 +446,7 @@ a {
                             @Html.TextBox("searchString")  
                         </div>
                 }
-                <button onclick="openModalAddDoctor()" style="border: none; background-color: #AD99DA; color: white; padding: 10px 20px; border-radius: 10px; cursor: pointer; position: absolute; top: 75px; right: 140px;">Додати лікаря</button>
+                <button onclick="openModalAddDoctor()" style="font-weight: bold;border: none; background-color: #AD99DA; color: white; padding: 10px 20px; border-radius: 10px; cursor: pointer; position: absolute; top: 75px; right: 140px;">Додати лікаря</button>
 
                 <table class="custom-table">
                     <thead>

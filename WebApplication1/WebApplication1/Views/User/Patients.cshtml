@@ -13,6 +13,8 @@
 <title>Centered White Rectangle</title>
 <link href='https://fonts.googleapis.com/css?family=Rubik' rel='stylesheet'>
 <style>
+
+
     body {
         margin: 0;
         padding: 0;
@@ -40,7 +42,7 @@
         width: calc(80% - 0px); /* Ширина контейнера (з урахуванням відступу 10% з кожного боку) */
         height: 100%; /* Висота контейнера */
         background-color: #FFFFFF; /* Бірий колір */
-        overflow: auto; 
+        overflow: hidden;
     }
         /*ЗДРАВИЙ КОД*/
         .modal {
@@ -205,6 +207,11 @@
     width: 100%;
 }
 
+.add-patient {
+    font-family: 'Rubik', sans-serif;
+    font-weight: bold;
+}
+
 th, td {
     white-space: nowrap;
     text-overflow: ellipsis;
@@ -255,6 +262,8 @@ tr:hover {
     display: flex;
     justify-content: center;
     padding-right: 8px;
+    border: none;
+    background: none;
 }
 
 .actions-col {
@@ -410,6 +419,9 @@ a {
     background-color: transparent; /* Ensures no background color */
 }
 
+    * {
+    font-family: 'Rubik', sans-serif;
+}
 </style>
 </head>
 <body>
@@ -465,7 +477,7 @@ a {
                             <th colspan="3" class="actions-col">Actions</th>
                         </tr>
                     </thead>
-                    <button onclick="openModalAddDoctor()" style="border: none; background-color: #AD99DA; color: white; padding: 10px 20px; border-radius: 10px; cursor: pointer; position: absolute;top: 75px; right: 140px;">Додати пацієнта</button>
+                    <button onclick="openModalAddDoctor()" class="add-patient" style="border: none; background-color: #AD99DA; color: white; padding: 10px 20px; border-radius: 10px; cursor: pointer; position: absolute;top: 75px; right: 140px;">Додати пацієнта</button>
 
                     <tbody>
                         @foreach (var patient in Model.IUsers)
